@@ -51,23 +51,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // Empties folders to start fresh
-        clean: {
-            dist: {
-                files: [
-                    {
-                        dot: true,
-                        src: [
-                            '.tmp',
-                            '<%= yeoman.dist %>/{,*/}*',
-                            '!<%= yeoman.dist %>/.git*'
-                        ]
-                    }
-                ]
-            },
-            server: '.tmp'
-        },
-
         // Automatically inject Bower components into the app
         wiredep: {
             app: {
@@ -76,6 +59,7 @@ module.exports = function (grunt) {
                 devDependencies: true
             }
         },
+
         concat: {
             options: {
               separator: ';'
@@ -87,31 +71,6 @@ module.exports = function (grunt) {
             dist: {
               src: '<%= yeoman.src %>/*.js',
               dest: '<%= yeoman.dist %>/formus.js'
-            }
-        },
-
-
-        // Copies remaining files to places other tasks can use
-        copy: {
-            dist: {
-                files: [
-                ]
-            },
-            styles: {
-                expand: true,
-                cwd: '<%= yeoman.app %>/styles',
-                dest: '.tmp/styles/',
-                src: '{,*/}*.css'
-            }
-        },
-        ngtemplates: {
-            app: {
-                cwd: '<%= yeoman.app %>',
-                src: ['views/**/*.html','views/*.html'],
-                dest: '<%= yeoman.app %>/scripts/templates.js',
-                options: {
-                    htmlmin: { collapseWhitespace: true, collapseBooleanAttributes: true }
-                }
             }
         }
     });
