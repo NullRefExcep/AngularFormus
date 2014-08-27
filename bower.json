@@ -2,6 +2,11 @@
   "devDependencies": {},
   "name": "AnguarFormus",
   "version": "0.0.1",
+  "main": "dist/formus.js",
+  "ignore": [
+    "src",
+    "app"
+  ],
   "dependencies": {
     "angular": "1.2.15",
     "bootstrap": "~3.0.3",
