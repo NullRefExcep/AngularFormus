@@ -1,15 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-<!-- bower:css -->
-<link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.css" />
-<!-- endbower -->
+    <title></title>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.css"/>
+    <!-- endbower -->
 </head>
 <body ng-app="app">
-	<div ng-controller="MainCtrl">
-		<pre>{{form | json}}</pre>
-	</div>
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="../" class="navbar-brand">AngularFormus</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#getting-started">Getting started</a>
+                </li>
+                <li>
+                    <a href="#customize">Customize</a>
+                </li>
+                <li>
+                    <a href="#components">Components</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://github.com/NullRefExcep/AngularFormus">Github</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div ng-controller="MainCtrl" class="container">
+    <div class="row" id="getting-started">
+        <div class="col-md-4">
+            <p class="lead">AngularFormus &#8211 simple and extensive form generator</p>
+            <span>Model:</span>
+            <pre>{{form.data | json}}</pre>
+        </div>
+        <div class="col-md-4">
+            <formus-form config="form.config" model="form.data" fieldset="form.fieldset"></formus-form>
+        </div>
+        <div class="col-md-4">
+            <pre>{{form.fieldset | json}}</pre>
+        </div>
+    </div>
+</div>
 </body>
 <!-- bower:js -->
 <script src="vendors/jquery/dist/jquery.js"></script>

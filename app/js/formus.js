@@ -265,28 +265,22 @@ formus.provider('FormusConfig', function ($logProvider) {
             }
         },
         'group': function () {
-            return {
-                'wrapClass': 'col col-6'
-            }
+            return {}
         },
         'fieldset': function () {
-            return {
-                'wrapClass': 'col col-6'
-            }
+            return {}
         },
         'form': function () {
             return {
                 title: '',
                 name: '',
                 fieldset: {
-                    class: 'subfieldset',
                     fields: []
                 },
                 data: {},
                 config: {
                     buttons: [],
-                    class: 'smart-form',
-                    wrapClass: 'col col-6',
+                    class: '',
                     submit: {
                         title: 'Save',
                         handler: function () {

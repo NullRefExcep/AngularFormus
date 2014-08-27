@@ -7,6 +7,6 @@ app.config(['FormusContainerProvider', 'FORMS_CONFIG', function (FormusContainer
     FormusContainerProvider.setContainer(FORMS_CONFIG);
 }]);
 
-app.controller('MainCtrl',function ($scope, FormusContainer) {
-	$scope.form = FormusContainer.get('firstForm');
-})
+app.controller('MainCtrl', function ($scope, FormusContainer) {
+    $scope.form = FormusContainer.get('firstForm');
+});

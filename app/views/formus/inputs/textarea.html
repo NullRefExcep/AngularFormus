@@ -1,0 +1,5 @@
+<label for="{{config.name}}" ng-show="config.showLabel" ng-bind="config.label"></label>
+<textarea ng-readonly="config.readonly" class="form-control" placeholder="{{config.placeholder?config.placeholder:config.label}}"
+          rows="{{ config.rows?config.rows:5 }}" ng-model="model" name="{{config.name}}" id="{{config.name}}"
+          style="{{config.style}}">
+</textarea>
