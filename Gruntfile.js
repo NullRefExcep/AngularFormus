@@ -1,31 +1,34 @@
 'use strict';
 
-module.exports = function (grunt) {
-
-    // Load grunt tasks automatically
+module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
-    // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
-    // Configurable paths for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'app',
         src: 'src',
         dist: 'dist'
     };
 
-    // Define the configuration for all the tasks
     grunt.initConfig({
 
-        // Project settings
         yeoman: appConfig,
 
-        // Watches files for changes and runs tasks based on the changed files
         watch: {
             bower: {
                 files: ['bower.json'],
                 tasks: ['wiredep']
+            },
+            app: {
+                options: {
+                    livereload: true
+                },
+                files: ['<%= yeoman.app %>/**/*'],
+            },
+            beauty: {
+                files: ['<%= yeoman.src %>/*.js', '<%= yeoman.app %>/**/*', 'Gruntfile.js'],
+                tasks: ['jsbeautifier']
             },
             js: {
                 files: ['<%= yeoman.src %>/*.js'],
@@ -37,21 +40,21 @@ module.exports = function (grunt) {
             }
         },
 
-        // Make sure code styles are up to par and there are no obvious mistakes
         jshint: {
             options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
+                globals: {},
+                predef: [
+                    'angular',
+                    '_'
+                ]
             },
             src: {
                 src: [
-                    'Gruntfile.js',
                     '<%= yeoman.src %>/*.js'
                 ]
             }
         },
 
-        // Automatically inject Bower components into the app
         wiredep: {
             app: {
                 src: ['<%= yeoman.app %>/index.html'],
@@ -60,22 +63,62 @@ module.exports = function (grunt) {
             }
         },
 
+        jsbeautifier: {
+            default: {
+                src: ["<%= yeoman.src %>/*.js"]
+            },
+            grunt: {
+                src: ["Gruntfile.js"]
+            },
+            app: {
+                src: ['<%= yeoman.app %>/*.*']
+            }
+        },
+
         concat: {
             options: {
-              separator: ';'
+                separator: ';\n'
             },
             src: {
-              src: '<%= yeoman.src %>/*.js',
-              dest: '<%= yeoman.app %>/js/formus.js'
+                options: {
+                    banner: ";(function( window, undefined ){ \n'use strict'; \n",
+                    footer: "\n}( window ));"
+                },
+                src: ['<%= yeoman.src %>/formus.js', '<%= yeoman.src %>/*.js'],
+                dest: '<%= yeoman.app %>/js/formus.js'
             },
             dist: {
-              src: '<%= yeoman.src %>/*.js',
-              dest: '<%= yeoman.dist %>/formus.js'
+                src: '<%= yeoman.src %>/*.js',
+                dest: '<%= yeoman.dist %>/formus.js'
+            }
+        },
+
+        connect: {
+            all: {
+                options: {
+                    open: true,
+                    port: 9009,
+                    hostname: '*',
+                    keepalive: true,
+                    livereload: true,
+                    useAvailablePort: true,
+                    base: '<%= yeoman.app %>'
+
+                }
             }
         }
     });
 
     grunt.registerTask('default', [
         'watch'
+    ]);
+    grunt.registerTask('hint', [
+        'jshint'
+    ]);
+    grunt.registerTask('beauty', [
+        'jsbeautifier'
+    ]);
+    grunt.registerTask('server', [
+        'connect'
     ]);
 };

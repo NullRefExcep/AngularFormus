@@ -7,10 +7,7 @@ var formsConfiguration = {
                     name: 'id',
                     label: ' ID',
                     input: 'textbox',
-                    readonly: true,
-                    validators: {
-                        required: true
-                    }
+                    readonly: true
                 },
                 {
                     name: 'name',
@@ -24,15 +21,26 @@ var formsConfiguration = {
                     name: 'website',
                     label: 'Website',
                     input: 'textbox',
-                    validators: {
-                        required: true,
-                        url: true
-                    }
+                    default: 'mysite.com'
                 },
                 {
                     name: 'address',
                     label: 'Address',
                     input: 'textarea',
+                    rows: 2,
+                    validators: {
+                        required: true
+                    }
+                },
+                {
+                    name: 'currency',
+                    label: 'Currency',
+                    input: 'select',
+                    empty: 'Select ...',
+                    items: [
+                        {value: 'aud', title: 'AUD'},
+                        {value: 'usa', title: 'USA'}
+                    ],
                     validators: {
                         required: true
                     }
@@ -53,18 +61,6 @@ var formsConfiguration = {
                     validators: {
                         required: true,
                         phone: true
-                    }
-                },
-                {
-                    name: 'currency',
-                    label: 'Currency',
-                    input: 'select',
-                    items: [
-                        {value: 'aud', title: 'AUD'},
-                        {value: 'usa', title: 'USA'}
-                    ],
-                    validators: {
-                        required: true
                     }
                 },
                 {
