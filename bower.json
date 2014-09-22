@@ -1,8 +1,18 @@
 {
-  "devDependencies": {},
-  "name": "AnguarFormus",
+  "name": "angular-formus",
+  "description": "Form generator for AngularJS",
   "version": "0.0.1",
+  "license": "MIT",
+  "keywords": ["angular", "form", "generator", "json"],
   "main": "dist/formus.js",
+  "authors": [
+    { "name": "Dmytro Karpovych", "email": "karpovych.d@gmail.com" },
+    { "name": "Serhiy Vinichuk", "email": "serhiyvinichuk@gmail.com" }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NullRefExcep/AngularFormus.git"
+  },
   "ignore": [
     "app",
     ".bowerrc",
@@ -18,5 +28,6 @@
     "angular": "1.2.15",
     "bootstrap": "~3.0.3",
     "lodash": "2.4.1"
-  }
+  },
+  "devDependencies": {}
 }

@@ -106,6 +106,14 @@ module.exports = function(grunt) {
 
                 }
             }
+        },
+
+        uglify: {
+            dist: {
+                files: {
+                    '<%= yeoman.dist %>/formus.min.js': ['<%= yeoman.dist %>/formus.js']
+                }
+            }
         }
     });
 
@@ -117,6 +125,9 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('beauty', [
         'jsbeautifier'
+    ]);
+    grunt.registerTask('build', [
+        'uglify:dist'
     ]);
     grunt.registerTask('server', [
         'connect'

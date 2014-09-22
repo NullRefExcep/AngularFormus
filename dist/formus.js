@@ -291,6 +291,16 @@ formus.directive('formusForm', function($q, FormusLinker) {
                     }
                 }, angular.noop);
             };
+
+            $rootScope.$on('Formus.validateForm', function(event, name) {
+                if (name === $scope.name) {
+                    $scope.validate().then(function() {
+                        $rootScope.$emit('Formus.validatedForm', true);
+                    }, function() {
+                        $rootScope.$emit('Formus.validatedForm', false);
+                    });
+                }
+            });
         }
     };
 });
