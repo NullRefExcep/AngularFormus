@@ -87,7 +87,8 @@ formus.provider('FormusContainer', function() {
     this.setContainer = function(data) {
         container = data;
     };
-    this.get = function(name) {
+
+    var get = function(name) {
         var form = {};
         if (typeof name === 'undefined') {
             log.error('Don\'t set form configuration name ');
@@ -103,12 +104,19 @@ formus.provider('FormusContainer', function() {
         }
         return helper.extendDeep(angular.copy(defaultConfig), angular.copy(form));
     };
+
+    var set = this.set = function(name, value) {
+        container[name] = value;
+    };
     this.$get = ['$log', 'FormusConfig', 'FormusHelper',
         function($log, FormusConfig, FormusHelper) {
             defaultConfig = FormusConfig.get('form');
             log = $log;
             helper = FormusHelper;
-            return this;
+            return {
+                get: get,
+                set: set
+            };
         }
     ];
 });
