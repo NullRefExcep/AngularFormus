@@ -60,31 +60,32 @@ formus.factory('FormusHelper', function() {
     var initModel = function(model, field) {
         var name = field.name;
         if (name) {
+            var currentModel = model;
             var keys = name.split('.');
             if (keys.length > 1) {
-                var currentModel = model;
-                _.each(keys, function(key) {
-                    if (typeof(currentModel) === 'undefined') {
+                for (var i = 0; i < keys.length - 1; i++) {
+                    var key = keys[i];
+                    if (angular.isUndefined(currentModel)) {
                         currentModel = {};
                     }
                     currentModel = currentModel[key];
+                }
+                if (angular.isUndefined(currentModel)) {
+                    currentModel = {};
+                }
+                name = keys[keys.length - 1];
+            }
+            if (angular.isUndefined(currentModel[name])) {
+                currentModel[name] = (angular.isUndefined(field.default)) ? ((field.fields) ? {} : '') : field.default;
+            }
+            if (field.fields) {
+                _.each(field.fields, function(field) {
+                    initModel(model[name], field);
                 });
-                if (typeof(currentModel) === 'undefined') {
-                    currentModel = (typeof(field.default) === 'undefined') ? ((field.fields) ? {} : '') : field.default;
-                }
-            } else {
-                if (typeof(model[name]) === 'undefined') {
-                    model[name] = (typeof(field.default) === 'undefined') ? ((field.fields) ? {} : '') : field.default;
-                }
-                if (field.fields) {
-                    _.each(field.fields, function(field) {
-                        initModel(model[name], field);
-                    });
-                }
             }
         } else {
-            if (typeof(model) === 'undefined') {
-                model = (typeof(field.default) === 'undefined') ? ((field.fields) ? {} : '') : field.default;
+            if (angular.isUndefined(model)) {
+                model = (angular.isUndefined(field.default)) ? ((field.fields) ? {} : '') : field.default;
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
@@ -93,6 +94,7 @@ formus.factory('FormusHelper', function() {
             }
         }
     };
+
     return {
         setNested: setNested,
         getNested: getNested,
