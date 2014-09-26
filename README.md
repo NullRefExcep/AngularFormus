@@ -78,7 +78,7 @@ form = {
 ```
 Nested fields:
 -------------
-You can create form with nested fiedls
+You can create form with nested fields:
 ```js
 form = {
         fieldsets: {
@@ -97,7 +97,7 @@ form = {
             }
       };
 ```
-And, as result get model:
+As result get model:
 ```js
 {
     val0: true,
