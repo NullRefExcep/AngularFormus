@@ -1,7 +1,6 @@
 AngularFormus
 =============
 Form generator for AngularJS
-
 Usage:
 ----
 ```html
@@ -18,13 +17,11 @@ Install:
 bower install -S angular-formus
 
 ```
-
 Add a `<script>` to your `index.html`:
 
 ```html
 <script src="/bower_components/angular-formus/dist/formus.min.js"></script>
 ```
-
 Available inputs:
 ----------------
 - textbox
@@ -38,7 +35,7 @@ Available inputs:
 - hidden
 
 You can add own input types, just register template in FormusTemplatesProvider:
-```
+```js
 app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
   FormusTemplatesProvider.setTemplateUrl('color', 'views/formus/inputs/color.html');
   FormusTemplatesProvider.setTemplateUrl('group', 'views/formus/inputs/group.html');
@@ -53,8 +50,7 @@ Example:
 ```js
 form = {
         name: "systemParametersForm",
-        fieldsets: [
-            {
+        fieldsets: {
                 fields: [
                     {
                         "name": "movePayments",
@@ -68,8 +64,7 @@ form = {
                         "suffix": "days"
                     }
                 ]
-            }
-        ],
+            },
         config: {
             class: 'some-css-class',
             submit: {
@@ -79,45 +74,28 @@ form = {
                 }
             }
         }
-      },
+      };
 ```
 Nested fields:
 -------------
 You can create form with nested fiedls
 ```js
 form = {
-        fieldsets: [
-            {
+        fieldsets: {
                 fields: [
-                    {
-                        "name": "val0",
-                        "label": "Move Value",
-                        "input": "checkbox"
-                    },
-                    {
-                        "name": "someExtend",
-                        "fields": [
-                            {
-                                "name": "val1",
-                                "label": "Nested Value #1",
-                                "input": "textbox"
-                            },
-                            {
-                                "name": "val2",
-                                "label": "Nested Value #2",
-                                "input": "select",
-                                "items":  [
+                    {"name": "val0", "label": "Text Value", "input": "checkbox"},
+                    {"name": "someExtend", "fields": [
+                            {"name": "val1", "label": "Nested Value #1", "input": "textbox"},
+                            {"name": "val2", "label": "Nested Value #2", "input": "select","items":  [
                                     {"value":1, "title":"opt 1"},
                                     {"value":2, "title":"opt 2"}
                                 ]
                             },
-                        
                         ]
                     }
                 ]
             }
-        ]
-      },
+      };
 ```
 And, as result get model:
 ```js
@@ -130,5 +108,31 @@ And, as result get model:
 }
 
 ```
+Also You can use dot notation:
+```js
+form = {
+        fieldsets: {
+                fields: [
+                    {"name": "base.first", "label": "Some Value", "input": "textbox"},
+                    {"name": "base.second", "label": "Some Value#2", "input": "textbox"},
+                    {"name": "other.value", "label": "Some Value#3", "input": "checkbox"},
+                ]
+            }
+      };
+```
+Result model:
+```js
+{
+    base:{
+        first: 'text val',
+        first: 'text val2',
+    },
+    other:{
+        value: false
+    }
+}
+```
+## License
+The MIT License
 
 
