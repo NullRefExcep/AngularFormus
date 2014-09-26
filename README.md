@@ -12,6 +12,18 @@ Usage:
                  config="form.config">
     </formus-form>
 ```
+Install:
+-------
+```
+bower install -S angular-formus
+
+```
+
+Add a `<script>` to your `index.html`:
+
+```html
+<script src="/bower_components/angular-formus/dist/formus.min.js"></script>
+```
 
 Available inputs:
 ----------------
@@ -24,6 +36,16 @@ Available inputs:
 - datetime
 - message
 - hidden
+
+You can add own input types, just register template in FormusTemplatesProvider:
+```
+app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
+  FormusTemplatesProvider.setTemplateUrl('color', 'views/formus/inputs/color.html');
+  FormusTemplatesProvider.setTemplateUrl('group', 'views/formus/inputs/group.html');
+  FormusTemplatesProvider.setTemplateUrl('file', 'views/formus/inputs/file.html');
+  FormusTemplatesProvider.setTemplateUrl('gallery', 'views/formus/inputs/gallery.html');
+}]);
+```
 
 Form configuration:
 ------------------
@@ -59,5 +81,7 @@ form = {
         }
       },
 ```
+Nested fields:
+-------------
 
 
