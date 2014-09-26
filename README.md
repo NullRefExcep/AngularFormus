@@ -4,7 +4,7 @@ Form generator for AngularJS
 
 Usage:
 ----
-```
+```html
 
     <formus-form name="form.name"
                  model="form.data"
@@ -50,7 +50,7 @@ app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
 Form configuration:
 ------------------
 Example:
-```
+```js
 form = {
         name: "systemParametersForm",
         fieldsets: [
@@ -83,5 +83,52 @@ form = {
 ```
 Nested fields:
 -------------
+You can create form with nested fiedls
+```js
+form = {
+        fieldsets: [
+            {
+                fields: [
+                    {
+                        "name": "val0",
+                        "label": "Move Value",
+                        "input": "checkbox"
+                    },
+                    {
+                        "name": "someExtend",
+                        "fields": [
+                            {
+                                "name": "val1",
+                                "label": "Nested Value #1",
+                                "input": "textbox"
+                            },
+                            {
+                                "name": "val2",
+                                "label": "Nested Value #2",
+                                "input": "select",
+                                "items":  [
+                                    {"value":1, "title":"opt 1"},
+                                    {"value":2, "title":"opt 2"}
+                                ]
+                            },
+                        
+                        ]
+                    }
+                ]
+            }
+        ]
+      },
+```
+And, as result get model:
+```js
+{
+    val0: true,
+    someExtend:{
+        val1: 'some text',
+        val2: 2
+    }
+}
+
+```
 
 
