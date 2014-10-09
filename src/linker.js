@@ -58,7 +58,7 @@ formus.provider('FormusLinker', function() {
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
             if (typeof($scope.fieldset) !== 'undefined') {
-                FormusHelper.initModel($scope.model, $scope.fieldset);
+                $scope.model = FormusHelper.initModel($scope.model, $scope.fieldset);
                 $scope.errors = $scope.errors || {};
                 listener();
             }

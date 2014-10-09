@@ -377,6 +377,7 @@ formus.factory('FormusHelper', function() {
         return defaultValue;
     };
 
+
     var initModel = function(model, field) {
         var name = field.name;
         if (name) {
@@ -396,7 +397,10 @@ formus.factory('FormusHelper', function() {
                 name = keys[keys.length - 1];
             }
             if (angular.isUndefined(currentModel[name])) {
-                currentModel[name] = (angular.isUndefined(field.default)) ? ((field.fields) ? {} : '') : field.default;
+                currentModel[name] = (field.fields) ? {} : '';
+            }
+            if (angular.isDefined(field.default)) {
+                currentModel[name] = field.default;
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
@@ -405,7 +409,10 @@ formus.factory('FormusHelper', function() {
             }
         } else {
             if (angular.isUndefined(model)) {
-                model = (angular.isUndefined(field.default)) ? ((field.fields) ? {} : '') : field.default;
+                model = (field.fields) ? {} : '';
+            }
+            if (angular.isDefined(field.default)) {
+                model = field.default;
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
@@ -413,6 +420,7 @@ formus.factory('FormusHelper', function() {
                 });
             }
         }
+        return model;
     };
 
     return {
@@ -484,7 +492,7 @@ formus.provider('FormusLinker', function() {
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
             if (typeof($scope.fieldset) !== 'undefined') {
-                FormusHelper.initModel($scope.model, $scope.fieldset);
+                $scope.model = FormusHelper.initModel($scope.model, $scope.fieldset);
                 $scope.errors = $scope.errors || {};
                 listener();
             }
