@@ -1,5 +1,8 @@
 AngularFormus
 =============
+[![Bower version](https://img.shields.io/badge/bower-v0.0.2-brightgreen.svg)](https://github.com/NullRefExcep/AngularFormus/releases)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://tldrlegal.com/license/mit-license)
+
 Form generator for AngularJS
 Usage:
 ----
