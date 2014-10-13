@@ -18,7 +18,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
                 $attr: $attr
             });
         },
-        controller: function($scope, $element) {
+        controller: function($scope, $element, $rootScope) {
             $scope.validate = function() {
                 var deferred = $q.defer(),
                     fieldsAmount = $element.find('formus-field').length,

@@ -1,4 +1,21 @@
 <form role="form" id="{{name}}" class="{{config.class}}" style="{{config.style}}" ng-submit="submit()">
     <formus-field ng-model="model" errors="errors" config="fieldset"></formus-field>
-        <button ng-if="config.submit" type="submit" class="btn btn-default" ng-bind="config.submit.title"></button>
+    <footer>
+        <div ng-repeat="btn in config.buttons" class="pull-left">
+            <button class="btn {{ btn.class }}" type="button" ng-if="!btn.items" ng-click="btn.handler()">
+                {{ btn.title }}
+            </button>
+            <div class="btn-group margin-left-5" ng-if="btn.items">
+                <button class="btn {{btn.class}} dropdown-toggle" type="button" data-toggle="dropdown">
+                    {{btn.title}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="item in btn.items"><a ng-click="item.handler()">{{item.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <button ng-if="config.submit" type="submit" class="{{config.submit.class}}" ng-bind="config.submit.title"></button>
+    </footer>
 </form>

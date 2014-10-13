@@ -17,6 +17,7 @@ formus.provider('FormusConfig', function($logProvider) {
                     buttons: [],
                     class: 'padding-top-10',
                     submit: {
+                        class: 'btn btn-default',
                         title: 'Save',
                         handler: function() {}
                     }
@@ -27,6 +28,12 @@ formus.provider('FormusConfig', function($logProvider) {
             return {
                 wrapClass: 'col col-6'
             };
+        },
+        checkbox: function() {
+            return {
+                trueValue: true,
+                falseValue: false
+            }
         },
         radio: function() {
             return {
