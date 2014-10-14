@@ -1,7 +1,6 @@
 formus.directive('formusField', function($injector, $http, $compile, $log, $templateCache, FormusLinker, FormusValidator, FormusHelper) {
     return {
         transclude: true,
-        replace: true,
         restrict: 'E',
         require: 'ngModel',
         scope: {

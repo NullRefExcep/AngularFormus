@@ -1,12 +1,17 @@
 <form role="form" id="{{name}}" class="{{config.class}}" style="{{config.style}}" ng-submit="submit()">
+    <header>
+        <div ng-if="config.showErrors">
+            
+        </div>
+    </header>
     <formus-field ng-model="model" errors="errors" config="fieldset"></formus-field>
     <footer>
         <div ng-repeat="btn in config.buttons" class="pull-left">
-            <button class="btn {{ btn.class }}" type="button" ng-if="!btn.items" ng-click="btn.handler()">
-                {{ btn.title }}
+            <button class="{{btn.class}}" type="button" ng-if="!btn.items" ng-click="btn.handler()">
+                {{btn.title}}
             </button>
             <div class="btn-group margin-left-5" ng-if="btn.items">
-                <button class="btn {{btn.class}} dropdown-toggle" type="button" data-toggle="dropdown">
+                <button class="{{btn.class}} dropdown-toggle" type="button" data-toggle="dropdown">
                     {{btn.title}}
                     <span class="caret"></span>
                 </button>

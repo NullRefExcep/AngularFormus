@@ -3,10 +3,11 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
         restrict: 'AE',
         transclude: true,
         templateUrl: FormusTemplates.getUrl('wrapper'),
-        link: function($scope, $element, $attr) {
-            $timeout(function () {
-                $scope.input = $scope.$$childHead.$$childHead;
-            });
+        link: {
+            post: function($scope, $element, $attr) {
+                        $scope.input = $scope.$$childHead.$$childHead;
+                
+            }
         }
     };
 });

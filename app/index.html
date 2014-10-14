@@ -4,17 +4,10 @@
 <head>
     <title></title>
     <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="styles/main.css" />
 </head>
 
 <body ng-app="app">
-    <style>
-        .btn {
-            margin: 2px;
-        }
-        .margin-bottom-0 { 
-            margin-bottom: 0;
-        }
-    </style>
     <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
         <div class="container">
             <div class="navbar-header">
@@ -47,11 +40,11 @@
                 <pre>{{form.data | json}}</pre>
             </div>
             <div class="col-md-4">
-                <span>Simple form:</span>
+                <h4 class="no-margin">Simple form</h4>
                 <formus-form config="form.config" model="form.data" fieldset="form.fieldset"></formus-form>
             </div>
-            <div class="col-md-4">
-                <span>JSON configuration</span>
+            <div class="col-md-4"> 
+                <h4 class="no-margin">JSON configuration</h4>
                 <pre>{{src | json}}</pre>
             </div>
         </div>

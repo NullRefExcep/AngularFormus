@@ -1,33 +1,28 @@
 var formsConfiguration = {
     firstForm: {
         title: 'Info',
-        config: {
-            buttons: [{
-                class: 'btn btn-danger',
-                title: 'Cancel'
-            }],
-            submit:{class:'btn btn-primary'}
-        },
         fieldset: {
             fields: [{
-                name: 'id',
-                label: ' ID',
-                input: 'textbox',
-                readonly: true
+                name: 'nested.test',
+                fields: [{
+                    name: 'name',
+                    label: 'Name',
+                    input: 'textbox',
+                    validators: {
+                        required: true
+                    }
+                }, {
+                    name: 'id',
+                    label: ' ID',
+                    input: 'textbox',
+                    readonly: true,
+                    default: 1,
+                    addon: '#'
+                }]
             }, {
                 name: 'checkValue',
                 input: 'checkbox',
-                label: 'Check Box',
-                default: 'Yes',
-                trueValue: 'Yes',
-                falseValue: 'No'
-            }, {
-                name: 'name',
-                label: 'Name',
-                input: 'textbox',
-                validators: {
-                    required: true
-                }
+                label: 'Check Box'
             }, {
                 name: 'website',
                 label: 'Website',
@@ -55,22 +50,6 @@ var formsConfiguration = {
                 }],
                 validators: {
                     required: true
-                }
-            }, {
-                name: 'phone',
-                label: 'Phone',
-                input: 'textbox',
-                validators: {
-                    required: true,
-                    phone: true
-                }
-            }, {
-                name: 'fax',
-                label: 'Fax',
-                input: 'textbox',
-                validators: {
-                    required: true,
-                    phone: true
                 }
             }, {
                 name: 'timezone',
@@ -102,11 +81,20 @@ var formsConfiguration = {
                     title: 'West'
                 }]
             }]
+        },
+        config: {
+            buttons: [{
+                class: 'btn btn-danger',
+                title: 'Cancel'
+            }],
+            submit: {
+                class: 'btn btn-primary'
+            }
         }
     },
     secondForm: {
-        fieldset:{
-            
+        fieldset: {
+
         }
     }
 }

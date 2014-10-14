@@ -58,8 +58,7 @@ gulp.task('dist', ['build'], function() {
 gulp.task('connect', function() {
     connect.server({
         root: appDir,
-        livereload: true,
-        fallback: 'index.html'
+        livereload: true
     });
 });
 

@@ -134,7 +134,6 @@ formus.provider('FormusContainer', function() {
 formus.directive('formusField', function($injector, $http, $compile, $log, $templateCache, FormusLinker, FormusValidator, FormusHelper) {
     return {
         transclude: true,
-        replace: true,
         restrict: 'E',
         require: 'ngModel',
         scope: {
@@ -398,13 +397,10 @@ formus.factory('FormusHelper', function() {
             if (keys.length > 1) {
                 for (var i = 0; i < keys.length - 1; i++) {
                     var key = keys[i];
-                    if (angular.isUndefined(currentModel)) {
-                        currentModel = {};
+                    if (angular.isUndefined(currentModel[key])) {
+                        currentModel[key] = {};
                     }
                     currentModel = currentModel[key];
-                }
-                if (angular.isUndefined(currentModel)) {
-                    currentModel = {};
                 }
                 name = keys[keys.length - 1];
             }
@@ -416,7 +412,7 @@ formus.factory('FormusHelper', function() {
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
-                    initModel(model[name], field);
+                    currentModel[name] = initModel(currentModel[name], field);
                 });
             }
         } else {
@@ -428,7 +424,7 @@ formus.factory('FormusHelper', function() {
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
-                    initModel(model, field);
+                    model = initModel(model, field);
                 });
             }
         }
@@ -688,10 +684,11 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
         restrict: 'AE',
         transclude: true,
         templateUrl: FormusTemplates.getUrl('wrapper'),
-        link: function($scope, $element, $attr) {
-            $timeout(function () {
-                $scope.input = $scope.$$childHead.$$childHead;
-            });
+        link: {
+            post: function($scope, $element, $attr) {
+                        $scope.input = $scope.$$childHead.$$childHead;
+                
+            }
         }
     };
 });
