@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     connect = require('gulp-connect'),
-    templateCache = require('gulp-angular-templatecache');
+    minifyHTML = require('gulp-minify-html')
+templateCache = require('gulp-angular-templatecache');
 
 /** Pathes */
 var scriptsGlob = ['src/formus.js', 'src/*.js'];
@@ -28,6 +29,7 @@ gulp.task('scripts', function() {
 
 gulp.task('views', function() {
     return gulp.src(viewsGlob)
+        .pipe(minifyHTML({empty:true}))
         .pipe(templateCache({
             module: 'formus',
             root: 'formus'
@@ -56,19 +58,20 @@ gulp.task('dist', ['build'], function() {
 gulp.task('connect', function() {
     connect.server({
         root: appDir,
-        livereload: true
+        livereload: true,
+        fallback: 'index.html'
     });
 });
 
-gulp.task('html', function () {
-  gulp.src(appDir + '**/*')
-    .pipe(connect.reload());
+gulp.task('html', function() {
+    gulp.src(appDir + '**/*')
+        .pipe(connect.reload());
 });
 
 gulp.task('watch', function() {
     gulp.watch(scriptsGlob, ['scripts', 'app']);
     gulp.watch(viewsGlob, ['views', 'app']);
-    gulp.watch(appDir + '**/*',['html']);
+    gulp.watch(appDir + '**/*', ['html']);
 });
 
 gulp.task('default', ['app', 'connect', 'watch']);
