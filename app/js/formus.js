@@ -14,7 +14,6 @@ formus.provider('FormusConfig', function($logProvider) {
                 title: '',
                 name: '',
                 fieldset: {
-                    wrapClass: 'col-md-12',
                     fields: []
                 },
                 data: {},
@@ -32,13 +31,18 @@ formus.provider('FormusConfig', function($logProvider) {
         },
         fieldset: function() {
             return {
-                wrapClass: 'col col-6'
             };
         },
         checkbox: function() {
             return {
+                showLabel: false,
                 trueValue: true,
                 falseValue: false
+            }
+        },
+        radio: function() {
+            return {
+                inline:true
             }
         },
         radio: function() {
@@ -497,6 +501,7 @@ formus.provider('FormusLinker', function() {
         }
     };
 
+
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
             if (typeof($scope.fieldset) !== 'undefined') {
@@ -682,12 +687,12 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
     return {
         restrict: 'AE',
         transclude: true,
-        replace: true,
-        scope:true,
         templateUrl: FormusTemplates.getUrl('wrapper'),
         link: function($scope, $element, $attr) {
-        },
-        controller: function($scope, $element) {}
+            $timeout(function () {
+                $scope.input = $scope.$$childHead.$$childHead;
+            });
+        }
     };
 });
 })();

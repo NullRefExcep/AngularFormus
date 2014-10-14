@@ -55,6 +55,7 @@ formus.provider('FormusLinker', function() {
         }
     };
 
+
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
             if (typeof($scope.fieldset) !== 'undefined') {

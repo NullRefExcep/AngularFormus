@@ -10,8 +10,11 @@ app.config(['FormusContainerProvider', 'FORMS_CONFIG', function (FormusContainer
 }]);
 
 app.controller('MainCtrl', function ($scope, FormusContainer, FORMS_CONFIG) {
-    $scope.form = FormusContainer.get('firstForm');
+    var form = $scope.form = FormusContainer.get('firstForm');
     $scope.src= FORMS_CONFIG.firstForm;
+    form.config.buttons[0].handler = function (){
+      form.fieldset.fields[0].label = 'Test';
+    };
 });
 
 app.config(['FormusValidatorProvider', function (FormusValidatorProvider) {

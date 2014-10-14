@@ -2,11 +2,11 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
     return {
         restrict: 'AE',
         transclude: true,
-        replace: true,
-        scope:true,
         templateUrl: FormusTemplates.getUrl('wrapper'),
         link: function($scope, $element, $attr) {
-        },
-        controller: function($scope, $element) {}
+            $timeout(function () {
+                $scope.input = $scope.$$childHead.$$childHead;
+            });
+        }
     };
 });

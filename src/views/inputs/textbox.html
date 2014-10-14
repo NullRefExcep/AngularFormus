@@ -1,5 +1,1 @@
-<div ng-class="{'has-error':error}">
-    <label for="{{config.name}}" ng-show="config.showLabel" ng-bind="config.label"></label>
-    <input ng-readonly="config.readonly" ng-model="model" class="form-control" id="{{config.name}}" name="{{config.name}}" placeholder="{{config.placeholder?config.placeholder:config.label}}">
-    <span class="help-block" ng-repeat="e in error" ng-bind="e"></span>
-</div>
+<input ng-readonly="config.readonly" ng-model="model" class="form-control" id="{{config.name}}" name="{{config.name}}" placeholder="{{config.placeholder?config.placeholder:config.label}}">
