@@ -1,3 +1,9 @@
+(function () {
+/**
+ * @author  Dmytro Karpovych
+ */
+var formus = angular.module('formus', []);
+
 formus.provider('FormusConfig', function($logProvider) {
     var getDefault = function() {
         return {};
@@ -75,7 +81,7 @@ formus.provider('FormusConfig', function($logProvider) {
         $get: ['$log', getProvider]
     };
 });
-;
+
 /** 
  * Provide getter for forms configurations
  */
@@ -120,7 +126,7 @@ formus.provider('FormusContainer', function() {
         }
     ];
 });
-;
+
 formus.directive('formusField', function($injector, $http, $compile, $log, $templateCache, FormusLinker, FormusValidator, FormusHelper) {
     return {
         transclude: true,
@@ -256,8 +262,8 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
         controller: function($scope, $element) {}
     };
 });
-;
-formus.directive('formusForm', function($q, FormusLinker) {
+
+formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
     return {
         transclude: true,
         replace: true,
@@ -269,7 +275,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
             'model': '=',
             'config': '='
         },
-        templateUrl: 'views/formus/form.html',
+        templateUrl: FormusTemplates.getUrl('form'),
         link: function($scope, $element, $attr) {
             FormusLinker.formLinker({
                 $scope: $scope,
@@ -319,12 +325,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
         }
     };
 });
-;
-/**
- * @author  Dmytro Karpovych
- */
-var formus = angular.module('formus', []);
-;
+
 /** 
  * Service with specific functions
  *
@@ -438,7 +439,7 @@ formus.factory('FormusHelper', function() {
         extractBackendErrors: extractBackendErrors
     };
 });
-;
+
 /** 
  * Provide container for directives linkers
  */
@@ -540,25 +541,24 @@ formus.provider('FormusLinker', function() {
         ]
     };
 });
-;
+
 /**
  * Provide container for templates by input types
  */
 formus.provider('FormusTemplates', function() {
     var q, cache, http, log;
     var templateMap = {
-        radio: 'views/formus/inputs/radio.html',
-        checkbox: 'views/formus/inputs/checkbox.html',
-        checklist: 'views/formus/inputs/checklist.html',
-        hidden: 'views/formus/inputs/hidden.html',
-        select: 'views/formus/inputs/select.html',
-        textarea: 'views/formus/inputs/textarea.html',
-        textbox: 'views/formus/inputs/textbox.html',
-        fieldset: 'views/formus/inputs/fieldset.html',
-        message: 'views/formus/inputs/message.html',
-        datetime: 'views/formus/inputs/datetime.html',
-        label: 'views/formus/inputs/label.html',
-        ckeditor: 'views/formus/inputs/ckeditor.html'
+        form: 'formus/form.html',
+        radio: 'formus/inputs/radio.html',
+        checkbox: 'formus/inputs/checkbox.html',
+        checklist: 'formus/inputs/checklist.html',
+        hidden: 'formus/inputs/hidden.html',
+        select: 'formus/inputs/select.html',
+        textarea: 'formus/inputs/textarea.html',
+        textbox: 'formus/inputs/textbox.html',
+        fieldset: 'formus/inputs/fieldset.html',
+        message: 'formus/inputs/message.html',
+        label: 'formus/inputs/label.html',
     };
 
     /**
@@ -628,13 +628,13 @@ formus.provider('FormusTemplates', function() {
                     has: has,
                     get: get,
                     load: load,
-                    getTemplateUrl: getTemplateUrl
+                    getUrl: getTemplateUrl
                 };
             }
         ]
     };
 });
-;
+
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
         required: function(value, config) {
@@ -675,3 +675,11 @@ formus.provider('FormusValidator', function($logProvider) {
         $get: getProvider
     };
 });
+})();
+angular.module("formus").run(["$templateCache", function($templateCache) {$templateCache.put("formus/form.html","<form role=\"form\" id=\"{{name}}\" class=\"{{config.class}}\" style=\"{{config.style}}\" ng-submit=\"submit()\"> <formus-field ng-model=\"model\" errors=\"errors\" config=\"fieldset\"></formus-field> <footer> <div ng-repeat=\"btn in config.buttons\" class=\"pull-left\"> <button class=\"btn {{ btn.class }}\" type=\"button\" ng-if=\"!btn.items\" ng-click=\"btn.handler()\"> {{ btn.title }} </button> <div class=\"btn-group margin-left-5\" ng-if=\"btn.items\"> <button class=\"btn {{btn.class}} dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> {{btn.title}} <span class=\"caret\"></span> </button> <ul class=\"dropdown-menu\"> <li ng-repeat=\"item in btn.items\"><a ng-click=\"item.handler()\">{{item.title}}</a> </li> </ul> </div> </div> <button ng-if=\"config.submit\" type=\"submit\" class=\"{{config.submit.class}}\" ng-bind=\"config.submit.title\"></button> </footer></form>");
+$templateCache.put("formus/inputs/checkbox.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><div class=\"checkbox\"> <label> <input type=\"checkbox\" ng-true-value=\"{{config.trueValue}}\" ng-false-value=\"{{config.falseValue}}\" ng-model=\"model\" name=\"{{config.name}}\">{{config.label}} </label></div><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
+$templateCache.put("formus/inputs/fieldset.html","<div class=\"row\"> <div ng-repeat=\"field in config.fields\" class=\"{{config.wrapClass}}\"> <formus-field ng-model=\"model\" errors=\"errors\" config=\"field\"></formus-field> </div></div>");
+$templateCache.put("formus/inputs/select.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><select name=\"{{config.name}}\" ng-model=\"model\" class=\"form-control\" style=\"{{config.style}}\" id=\"{{config.name}}\" ng-options=\"item.value as item.title for item in config.items\"> <option value=\"\" ng-if=\"config.empty\">{{config.empty}}</option></select><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
+$templateCache.put("formus/inputs/textarea.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><textarea ng-readonly=\"config.readonly\" class=\"form-control\" placeholder=\"{{config.placeholder?config.placeholder:config.label}}\" rows=\"{{config.rows}}\" ng-model=\"model\" name=\"{{config.name}}\" id=\"{{config.name}}\" style=\"{{config.style}}\"></textarea><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
+$templateCache.put("formus/inputs/textbox.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><input ng-readonly=\"config.readonly\" ng-model=\"model\" class=\"form-control\" id=\"{{config.name}}\" name=\"{{config.name}}\" placeholder=\"{{config.placeholder?config.placeholder:config.label}}\"><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
+$templateCache.put("formus/inputs/wrapper.html","<div></div>");}]);

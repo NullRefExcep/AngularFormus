@@ -104,4 +104,9 @@ var formsConfiguration = {
             }]
         }
     },
+    secondForm: {
+        fieldset:{
+            
+        }
+    }
 }

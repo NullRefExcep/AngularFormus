@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error':error}">
+<div ng-class="{'has-error':error}">
 <label for="{{config.name}}" ng-show="config.showLabel" ng-bind="config.label"></label>
 <textarea ng-readonly="config.readonly" class="form-control" placeholder="{{config.placeholder?config.placeholder:config.label}}"
           rows="{{config.rows}}" ng-model="model" name="{{config.name}}" id="{{config.name}}"

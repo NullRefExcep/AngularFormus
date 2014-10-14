@@ -68,7 +68,8 @@ formus.provider('FormusLinker', function() {
     var linkers = {
         loadTemplate: loadTemplateLinker,
         default: defaultLinker,
-        form: formLinker
+        form: formLinker,
+        wrapperLinker: loadTemplateLinker
     };
 
     function getLinker(injector, log) {

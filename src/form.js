@@ -1,4 +1,4 @@
-formus.directive('formusForm', function($q, FormusLinker) {
+formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
     return {
         transclude: true,
         replace: true,
@@ -10,7 +10,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
             'model': '=',
             'config': '='
         },
-        templateUrl: 'views/formus/form.html',
+        templateUrl: FormusTemplates.getUrl('form'),
         link: function($scope, $element, $attr) {
             FormusLinker.formLinker({
                 $scope: $scope,

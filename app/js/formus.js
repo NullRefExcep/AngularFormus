@@ -1,10 +1,9 @@
-;(function( window, undefined ){ 
-'use strict'; 
+(function () {
 /**
  * @author  Dmytro Karpovych
  */
 var formus = angular.module('formus', []);
-;
+
 formus.provider('FormusConfig', function($logProvider) {
     var getDefault = function() {
         return {};
@@ -82,7 +81,7 @@ formus.provider('FormusConfig', function($logProvider) {
         $get: ['$log', getProvider]
     };
 });
-;
+
 /** 
  * Provide getter for forms configurations
  */
@@ -127,7 +126,7 @@ formus.provider('FormusContainer', function() {
         }
     ];
 });
-;
+
 formus.directive('formusField', function($injector, $http, $compile, $log, $templateCache, FormusLinker, FormusValidator, FormusHelper) {
     return {
         transclude: true,
@@ -263,8 +262,8 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
         controller: function($scope, $element) {}
     };
 });
-;
-formus.directive('formusForm', function($q, FormusLinker) {
+
+formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
     return {
         transclude: true,
         replace: true,
@@ -276,7 +275,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
             'model': '=',
             'config': '='
         },
-        templateUrl: 'views/formus/form.html',
+        templateUrl: FormusTemplates.getUrl('form'),
         link: function($scope, $element, $attr) {
             FormusLinker.formLinker({
                 $scope: $scope,
@@ -326,7 +325,7 @@ formus.directive('formusForm', function($q, FormusLinker) {
         }
     };
 });
-;
+
 /** 
  * Service with specific functions
  *
@@ -440,7 +439,7 @@ formus.factory('FormusHelper', function() {
         extractBackendErrors: extractBackendErrors
     };
 });
-;
+
 /** 
  * Provide container for directives linkers
  */
@@ -511,7 +510,8 @@ formus.provider('FormusLinker', function() {
     var linkers = {
         loadTemplate: loadTemplateLinker,
         default: defaultLinker,
-        form: formLinker
+        form: formLinker,
+        wrapperLinker: loadTemplateLinker
     };
 
     function getLinker(injector, log) {
@@ -542,25 +542,25 @@ formus.provider('FormusLinker', function() {
         ]
     };
 });
-;
+
 /**
  * Provide container for templates by input types
  */
 formus.provider('FormusTemplates', function() {
     var q, cache, http, log;
     var templateMap = {
-        radio: 'views/formus/inputs/radio.html',
-        checkbox: 'views/formus/inputs/checkbox.html',
-        checklist: 'views/formus/inputs/checklist.html',
-        hidden: 'views/formus/inputs/hidden.html',
-        select: 'views/formus/inputs/select.html',
-        textarea: 'views/formus/inputs/textarea.html',
-        textbox: 'views/formus/inputs/textbox.html',
-        fieldset: 'views/formus/inputs/fieldset.html',
-        message: 'views/formus/inputs/message.html',
-        datetime: 'views/formus/inputs/datetime.html',
-        label: 'views/formus/inputs/label.html',
-        ckeditor: 'views/formus/inputs/ckeditor.html'
+        form: 'formus/form.html',
+        wrapper: 'formus/inputs/wrapper.html',
+        radio: 'formus/inputs/radio.html',
+        checkbox: 'formus/inputs/checkbox.html',
+        checklist: 'formus/inputs/checklist.html',
+        hidden: 'formus/inputs/hidden.html',
+        select: 'formus/inputs/select.html',
+        textarea: 'formus/inputs/textarea.html',
+        textbox: 'formus/inputs/textbox.html',
+        fieldset: 'formus/inputs/fieldset.html',
+        message: 'formus/inputs/message.html',
+        label: 'formus/inputs/label.html',
     };
 
     /**
@@ -630,13 +630,13 @@ formus.provider('FormusTemplates', function() {
                     has: has,
                     get: get,
                     load: load,
-                    getTemplateUrl: getTemplateUrl
+                    getUrl: getTemplateUrl
                 };
             }
         ]
     };
 });
-;
+
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
         required: function(value, config) {
@@ -678,4 +678,16 @@ formus.provider('FormusValidator', function($logProvider) {
     };
 });
 
-}( window ));
+formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeout) {
+    return {
+        restrict: 'AE',
+        transclude: true,
+        replace: true,
+        scope:true,
+        templateUrl: FormusTemplates.getUrl('wrapper'),
+        link: function($scope, $element, $attr) {
+        },
+        controller: function($scope, $element) {}
+    };
+});
+})();
