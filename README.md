@@ -30,12 +30,7 @@ Available inputs:
 - textbox
 - texarea
 - select
-- radio
 - checkbox
-- checklist
-- datetime
-- message
-- hidden
 
 You can add own input types, just register template in FormusTemplatesProvider:
 ```js
