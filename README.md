@@ -1,38 +1,93 @@
-AngularFormus
-=============
+# AngularFormus
 [![Bower version](https://img.shields.io/badge/bower-v0.0.2-brightgreen.svg)](https://github.com/NullRefExcep/AngularFormus/releases)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://tldrlegal.com/license/mit-license)
 
 Form generator for AngularJS
-Usage:
-----
+## Usage:
 ```html
-
-    <formus-form name="form.name"
-                 model="form.data"
-                 fieldsets="form.fieldsets"
-                 config="form.config">
-    </formus-form>
+<formus-form name="form.name" 
+    model="form.data" 
+    fieldsets="form.fieldsets" 
+    config="form.config">
+</formus-form>
 ```
-Install:
--------
+### Install:
 ```
 bower install -S angular-formus
-
 ```
 Add a `<script>` to your `index.html`:
-
 ```html
 <script src="/bower_components/angular-formus/dist/formus.min.js"></script>
 ```
-Available inputs:
-----------------
+### Form configuration:
+
+Example:
+```js
+form = {
+    name: "systemParametersForm",
+    fieldsets: {
+        fields: [{
+            "name": "movePayments",
+            "label": "Move Payments Straight To Cash",
+            "input": "checkbox"
+        }, {
+            "name": "cancelPendingAfter",
+            "label": "Automatically Cancel Pending Mode Bookings after",
+            "input": "textbox",
+            "suffix": "days"
+        }]
+    },
+    config: {
+        class: 'some-css-class',
+        submit: {
+            title: 'Save',
+            handler: function() {
+                console.log('I\'m submited');
+            }
+        }
+    }
+}
+```
+### Field configuration
+Form must has one general field, which contain others fields
+Example of field declaration:
+```js
+...
+{
+    name:'nameOfFieldInModel', // string
+    label: 'label', // string
+    fields: [] //array of objects
+    input:'typeOfInput' // string 
+}
+...
+```
+Each field can contain own nested fields.
+All field attributes are optional except `input`
+If `name` attributes don't set, that field must conatain nested fields (attribute `fields`)
+You can add custom attributes, they are available in view at object config
+For field can be override linker. E.g:
+{
+    name:'name',
+    linker:function($scope, $element, $attr, $http /** Some other services **){
+        
+    }
+}
+
+
+### Available inputs:
+- fieldset (container for other fields)
 - textbox
 - texarea
 - select
 - checkbox
 
-You can add own input types, just register template in FormusTemplatesProvider:
+### Customization
+
+Formus allow customize all elements of module
+
+#### Templates
+
+You can add or override own input templates, just register template in FormusTemplatesProvider:
 ```js
 app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
   FormusTemplatesProvider.setTemplateUrl('color', 'views/formus/inputs/color.html');
@@ -41,41 +96,39 @@ app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
   FormusTemplatesProvider.setTemplateUrl('gallery', 'views/formus/inputs/gallery.html');
 }]);
 ```
+#### Linkers
 
-Form configuration:
-------------------
-Example:
+You can set custom linkers for special input types:
 ```js
-form = {
-        name: "systemParametersForm",
-        fieldsets: {
-                fields: [
-                    {
-                        "name": "movePayments",
-                        "label": "Move Payments Straight To Cash",
-                        "input": "checkbox"
-                    },
-                    {
-                        "name": "cancelPendingAfter",
-                        "label": "Automatically Cancel Pending Mode Bookings after",
-                        "input": "textbox",
-                        "suffix": "days"
-                    }
-                ]
-            },
-        config: {
-            class: 'some-css-class',
-            submit: {
-                title: 'Save',
-                handler: function () {
-                  console.log('I\'m submited');
-                }
-            }
-        }
-      };
+FormusLinkerProvider.setLinker('gallery', function ($scope, $element, fileUpload) {
+    $scope.uploadImage = function () {
+      if (fileUpload.isValid($element.find('.imgFileInput'))) {
+        alert('Select file');
+      } else {
+        fileUpload.upload($element.find('.imgFileInput')).then(function (response) {
+          $scope.model.push(response.data.url);
+        });
+      }
+    };
+    $scope.removeImage = function (index) {
+      $scope.model.splice(index, 1);
+    };
+    $scope.afterLoadTemplate = function () {
+      if (!Array.isArray($scope.model)) {
+        $scope.model = [];
+      }
+    }
+});
 ```
-Nested fields:
--------------
+
+It's easy way to create new input types
+
+### Features
+
+Formus has some special features
+
+#### Nested fields:
+
 You can create form with nested fields:
 ```js
 form = {

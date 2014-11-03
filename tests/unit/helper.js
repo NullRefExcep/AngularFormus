@@ -12,6 +12,9 @@ describe('Formus Helper', function() {
                 name: 'long',
                 default: 30.00
             }]
+        }, {
+            name: 'other.desc',
+            default: 'Empty'
         }]
     };
 
@@ -44,10 +47,14 @@ describe('Formus Helper', function() {
     });
 
     it('should create new model from fields configuration', function() {
-    	var value = 'test';
-        var model = {name: value};
+        var value = 'test';
+        var model = {
+            name: value
+        };
         var newModel = helper.initModel(model, fieldsConfig);
         expect(newModel.name).toBe(value);
         expect(newModel.coordinates).toBeDefined();
+        expect(newModel.other.desc).toBeDefined();
+        expect(newModel.other.desc).toBe('Empty');
     });
 });
