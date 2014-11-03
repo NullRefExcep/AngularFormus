@@ -334,6 +334,9 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
  *
  */
 formus.factory('FormusHelper', function() {
+    /**
+     * Extract error object from server response
+     */
     var extractBackendErrors = function(response) {
         var errors = {};
         angular.forEach(response.data, function(error) {
@@ -341,6 +344,10 @@ formus.factory('FormusHelper', function() {
         }, errors);
         return errors;
     };
+
+    /**
+     * Merge objects by recursive strategy
+     */
     var extendDeep = function extendDeep(dst) {
         angular.forEach(arguments, function(obj) {
             if (obj !== dst) {
@@ -356,6 +363,9 @@ formus.factory('FormusHelper', function() {
         return dst;
     };
 
+    /**
+     * Set property value from object by nested name (with dot)
+     */
     var setNested = function(model, name, value) {
         if (name) {
             if (!angular.isObject(model)) {
@@ -372,6 +382,10 @@ formus.factory('FormusHelper', function() {
         model = value;
         return value;
     };
+
+    /**
+     * Get property value from object by nested name (with dot)
+     */
     var getNested = function(model, name, defaultValue) {
         defaultValue = angular.isDefined(defaultValue) ? defaultValue : undefined;
         if (angular.isDefined(model)) {
@@ -388,7 +402,9 @@ formus.factory('FormusHelper', function() {
         return defaultValue;
     };
 
-
+    /**
+     * Init model object by fields configuration with setting default values
+     */
     var initModel = function(model, field) {
         var name = field.name;
         if (name) {
@@ -431,12 +447,31 @@ formus.factory('FormusHelper', function() {
         return model;
     };
 
+    /**
+     * Create array of objects from other object by value and title fields and property name (optionaly)
+     */
+    var extractItems = function(data, valueField, titleField, groupName) {
+        var list = [];
+
+        if ((arguments.length === 4) && (angular.isDefined(groupName))) {
+            data = data[groupName];
+        }
+        _.each(data, function(item) {
+            list.push({
+                value: item[valueField],
+                title: item[titleField]
+            });
+        });
+        return list;
+    };
+
     return {
         setNested: setNested,
         getNested: getNested,
         initModel: initModel,
         extendDeep: extendDeep,
-        extractBackendErrors: extractBackendErrors
+        extractBackendErrors: extractBackendErrors,
+        extractItems: extractItems
     };
 });
 

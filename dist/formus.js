@@ -14,7 +14,6 @@ formus.provider('FormusConfig', function($logProvider) {
                 title: '',
                 name: '',
                 fieldset: {
-                    wrapClass: 'col-md-12',
                     fields: []
                 },
                 data: {},
@@ -32,13 +31,18 @@ formus.provider('FormusConfig', function($logProvider) {
         },
         fieldset: function() {
             return {
-                wrapClass: 'col col-6'
             };
         },
         checkbox: function() {
             return {
+                showLabel: false,
                 trueValue: true,
                 falseValue: false
+            }
+        },
+        radio: function() {
+            return {
+                inline:true
             }
         },
         radio: function() {
@@ -130,7 +134,6 @@ formus.provider('FormusContainer', function() {
 formus.directive('formusField', function($injector, $http, $compile, $log, $templateCache, FormusLinker, FormusValidator, FormusHelper) {
     return {
         transclude: true,
-        replace: true,
         restrict: 'E',
         require: 'ngModel',
         scope: {
@@ -331,6 +334,9 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
  *
  */
 formus.factory('FormusHelper', function() {
+    /**
+     * Extract error object from server response
+     */
     var extractBackendErrors = function(response) {
         var errors = {};
         angular.forEach(response.data, function(error) {
@@ -338,6 +344,10 @@ formus.factory('FormusHelper', function() {
         }, errors);
         return errors;
     };
+
+    /**
+     * Merge objects by recursive strategy
+     */
     var extendDeep = function extendDeep(dst) {
         angular.forEach(arguments, function(obj) {
             if (obj !== dst) {
@@ -353,6 +363,9 @@ formus.factory('FormusHelper', function() {
         return dst;
     };
 
+    /**
+     * Set property value from object by nested name (with dot)
+     */
     var setNested = function(model, name, value) {
         if (name) {
             if (!angular.isObject(model)) {
@@ -369,6 +382,10 @@ formus.factory('FormusHelper', function() {
         model = value;
         return value;
     };
+
+    /**
+     * Get property value from object by nested name (with dot)
+     */
     var getNested = function(model, name, defaultValue) {
         defaultValue = angular.isDefined(defaultValue) ? defaultValue : undefined;
         if (angular.isDefined(model)) {
@@ -385,7 +402,9 @@ formus.factory('FormusHelper', function() {
         return defaultValue;
     };
 
-
+    /**
+     * Init model object by fields configuration with setting default values
+     */
     var initModel = function(model, field) {
         var name = field.name;
         if (name) {
@@ -394,13 +413,10 @@ formus.factory('FormusHelper', function() {
             if (keys.length > 1) {
                 for (var i = 0; i < keys.length - 1; i++) {
                     var key = keys[i];
-                    if (angular.isUndefined(currentModel)) {
-                        currentModel = {};
+                    if (angular.isUndefined(currentModel[key])) {
+                        currentModel[key] = {};
                     }
                     currentModel = currentModel[key];
-                }
-                if (angular.isUndefined(currentModel)) {
-                    currentModel = {};
                 }
                 name = keys[keys.length - 1];
             }
@@ -412,7 +428,7 @@ formus.factory('FormusHelper', function() {
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
-                    initModel(model[name], field);
+                    currentModel[name] = initModel(currentModel[name], field);
                 });
             }
         } else {
@@ -424,11 +440,29 @@ formus.factory('FormusHelper', function() {
             }
             if (field.fields) {
                 _.each(field.fields, function(field) {
-                    initModel(model, field);
+                    model = initModel(model, field);
                 });
             }
         }
         return model;
+    };
+
+    /**
+     * Create array of objects from other object by value and title fields and property name (optionaly)
+     */
+    var extractItems = function(data, valueField, titleField, groupName) {
+        var list = [];
+
+        if ((arguments.length === 4) && (angular.isDefined(groupName))) {
+            data = data[groupName];
+        }
+        _.each(data, function(item) {
+            list.push({
+                value: item[valueField],
+                title: item[titleField]
+            });
+        });
+        return list;
     };
 
     return {
@@ -436,7 +470,8 @@ formus.factory('FormusHelper', function() {
         getNested: getNested,
         initModel: initModel,
         extendDeep: extendDeep,
-        extractBackendErrors: extractBackendErrors
+        extractBackendErrors: extractBackendErrors,
+        extractItems: extractItems
     };
 });
 
@@ -497,6 +532,7 @@ formus.provider('FormusLinker', function() {
         }
     };
 
+
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
             if (typeof($scope.fieldset) !== 'undefined') {
@@ -510,7 +546,8 @@ formus.provider('FormusLinker', function() {
     var linkers = {
         loadTemplate: loadTemplateLinker,
         default: defaultLinker,
-        form: formLinker
+        form: formLinker,
+        wrapperLinker: loadTemplateLinker
     };
 
     function getLinker(injector, log) {
@@ -549,6 +586,7 @@ formus.provider('FormusTemplates', function() {
     var q, cache, http, log;
     var templateMap = {
         form: 'formus/form.html',
+        wrapper: 'formus/inputs/wrapper.html',
         radio: 'formus/inputs/radio.html',
         checkbox: 'formus/inputs/checkbox.html',
         checklist: 'formus/inputs/checklist.html',
@@ -675,11 +713,26 @@ formus.provider('FormusValidator', function($logProvider) {
         $get: getProvider
     };
 });
+
+formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeout) {
+    return {
+        restrict: 'AE',
+        transclude: true,
+        templateUrl: FormusTemplates.getUrl('wrapper'),
+        link: {
+            post: function($scope, $element, $attr) {
+                        $scope.input = $scope.$$childHead.$$childHead;
+                
+            }
+        }
+    };
+});
 })();
-angular.module("formus").run(["$templateCache", function($templateCache) {$templateCache.put("formus/form.html","<form role=\"form\" id=\"{{name}}\" class=\"{{config.class}}\" style=\"{{config.style}}\" ng-submit=\"submit()\"> <formus-field ng-model=\"model\" errors=\"errors\" config=\"fieldset\"></formus-field> <footer> <div ng-repeat=\"btn in config.buttons\" class=\"pull-left\"> <button class=\"btn {{ btn.class }}\" type=\"button\" ng-if=\"!btn.items\" ng-click=\"btn.handler()\"> {{ btn.title }} </button> <div class=\"btn-group margin-left-5\" ng-if=\"btn.items\"> <button class=\"btn {{btn.class}} dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> {{btn.title}} <span class=\"caret\"></span> </button> <ul class=\"dropdown-menu\"> <li ng-repeat=\"item in btn.items\"><a ng-click=\"item.handler()\">{{item.title}}</a> </li> </ul> </div> </div> <button ng-if=\"config.submit\" type=\"submit\" class=\"{{config.submit.class}}\" ng-bind=\"config.submit.title\"></button> </footer></form>");
-$templateCache.put("formus/inputs/checkbox.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><div class=\"checkbox\"> <label> <input type=\"checkbox\" ng-true-value=\"{{config.trueValue}}\" ng-false-value=\"{{config.falseValue}}\" ng-model=\"model\" name=\"{{config.name}}\">{{config.label}} </label></div><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
-$templateCache.put("formus/inputs/fieldset.html","<div class=\"row\"> <div ng-repeat=\"field in config.fields\" class=\"{{config.wrapClass}}\"> <formus-field ng-model=\"model\" errors=\"errors\" config=\"field\"></formus-field> </div></div>");
-$templateCache.put("formus/inputs/select.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><select name=\"{{config.name}}\" ng-model=\"model\" class=\"form-control\" style=\"{{config.style}}\" id=\"{{config.name}}\" ng-options=\"item.value as item.title for item in config.items\"> <option value=\"\" ng-if=\"config.empty\">{{config.empty}}</option></select><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
-$templateCache.put("formus/inputs/textarea.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><textarea ng-readonly=\"config.readonly\" class=\"form-control\" placeholder=\"{{config.placeholder?config.placeholder:config.label}}\" rows=\"{{config.rows}}\" ng-model=\"model\" name=\"{{config.name}}\" id=\"{{config.name}}\" style=\"{{config.style}}\"></textarea><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
-$templateCache.put("formus/inputs/textbox.html","<div class=\"form-group\" ng-class=\"{\'has-error\':error}\"><label for=\"{{config.name}}\" ng-show=\"config.showLabel\" ng-bind=\"config.label\"></label><input ng-readonly=\"config.readonly\" ng-model=\"model\" class=\"form-control\" id=\"{{config.name}}\" name=\"{{config.name}}\" placeholder=\"{{config.placeholder?config.placeholder:config.label}}\"><span class=\"help-block\" ng-repeat=\"e in error\" ng-bind=\"e\"></span></div>");
-$templateCache.put("formus/inputs/wrapper.html","<div></div>");}]);
+angular.module("formus").run(["$templateCache", function($templateCache) {$templateCache.put("formus/form.html","<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if=config.showErrors></div></header><formus-field ng-model=model errors=errors config=fieldset></formus-field><footer><div ng-repeat=\"btn in config.buttons\" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=btn.handler()>{{btn.title}}</button><div class=\"btn-group margin-left-5\" ng-if=btn.items><button class=\"{{btn.class}} dropdown-toggle\" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat=\"item in btn.items\"><a ng-click=item.handler()>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>");
+$templateCache.put("formus/inputs/checkbox.html","<div class=checkbox><label><input type=checkbox ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} ng-model=model name={{config.name}}>{{config.label}}</label></div>");
+$templateCache.put("formus/inputs/fieldset.html","<div class=row><formus-wrapper ng-repeat=\"field in config.fields\" class={{config.wrapClass}}><formus-field ng-model=model errors=errors config=field></formus-field></formus-wrapper></div>");
+$templateCache.put("formus/inputs/radio.html","<div ng-if=!config.inline><div class=radio ng-repeat=\"item in config.items\"><label><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div></div><div ng-if=config.inline><label class=\"radio radio-inline\" ng-repeat=\"item in config.items\"><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div>");
+$templateCache.put("formus/inputs/select.html","<select name={{config.name}} ng-model=model class=form-control style={{config.style}} id={{config.name}} ng-options=\"item.value as item.title for item in config.items\"><option value ng-if=config.empty>{{config.empty}}</option></select>");
+$templateCache.put("formus/inputs/textarea.html","<textarea ng-readonly=config.readonly class=form-control placeholder={{config.placeholder?config.placeholder:config.label}} rows={{config.rows}} ng-model=model name={{config.name}} id={{config.name}} style={{config.style}}></textarea>");
+$templateCache.put("formus/inputs/textbox.html","<div ng-class=\"{\'input-group\': config.addon}\"><div class=input-group-addon ng-if=config.addon ng-bind=config.addon></div><input ng-readonly=config.readonly ng-model=model class=form-control id={{config.name}} name={{config.name}} placeholder={{config.placeholder?config.placeholder:config.label}}></div>");
+$templateCache.put("formus/inputs/wrapper.html","<div class=\"form-group margin-bottom-5 col-md-12\" ng-class=\"{\'has-error\': input.error}\"><label for={{input.config.name}} ng-show=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude></div><span class=help-block ng-repeat=\"e in input.error\" ng-bind=e></span></div>");}]);

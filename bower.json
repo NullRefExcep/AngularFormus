@@ -3,11 +3,22 @@
   "description": "Form generator for AngularJS",
   "version": "0.0.1",
   "license": "MIT",
-  "keywords": ["angular", "form", "generator", "json"],
+  "keywords": [
+    "angular",
+    "form",
+    "generator",
+    "json"
+  ],
   "main": "dist/formus.js",
   "authors": [
-    { "name": "Dmytro Karpovych", "email": "karpovych.d@gmail.com" },
-    { "name": "Serhiy Vinichuk", "email": "serhiyvinichuk@gmail.com" }
+    {
+      "name": "Dmytro Karpovych",
+      "email": "karpovych.d@gmail.com"
+    },
+    {
+      "name": "Serhiy Vinichuk",
+      "email": "serhiyvinichuk@gmail.com"
+    }
   ],
   "repository": {
     "type": "git",
@@ -15,6 +26,7 @@
   },
   "ignore": [
     "app",
+    "tests",
     ".bowerrc",
     ".gitignore",
     ".jshintrc",
@@ -25,9 +37,11 @@
     "LICENSE"
   ],
   "dependencies": {
-    "angular": "1.2.15",
+    "angular": "^1.2",
     "bootstrap": "~3.0.3",
     "lodash": "2.4.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "angular-mocks": "~1.3.1"
+  }
 }

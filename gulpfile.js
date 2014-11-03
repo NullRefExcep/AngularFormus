@@ -7,13 +7,16 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     connect = require('gulp-connect'),
-    minifyHTML = require('gulp-minify-html')
-templateCache = require('gulp-angular-templatecache');
+    minifyHTML = require('gulp-minify-html'),
+    karma = require('gulp-karma'),
+    wiredep = require('wiredep'),
+    templateCache = require('gulp-angular-templatecache');
 
 /** Pathes */
 var scriptsGlob = ['src/formus.js', 'src/*.js'];
 var viewsGlob = ['src/views/**/*.html'];
 var buildDir = './build/';
+var testDir = './tests/';
 var appDir = './app/';
 var distDir = './dist/';
 var buildGlob = [buildDir + 'formus.js', buildDir + 'templates.js'];
@@ -29,7 +32,9 @@ gulp.task('scripts', function() {
 
 gulp.task('views', function() {
     return gulp.src(viewsGlob)
-        .pipe(minifyHTML({empty:true}))
+        .pipe(minifyHTML({
+            empty: true
+        }))
         .pipe(templateCache({
             module: 'formus',
             root: 'formus'
@@ -58,6 +63,7 @@ gulp.task('dist', ['build'], function() {
 gulp.task('connect', function() {
     connect.server({
         root: appDir,
+        port: 8081,
         livereload: true
     });
 });
@@ -71,6 +77,24 @@ gulp.task('watch', function() {
     gulp.watch(scriptsGlob, ['scripts', 'app']);
     gulp.watch(viewsGlob, ['views', 'app']);
     gulp.watch(appDir + '**/*', ['html']);
+});
+
+gulp.task('test', function() {
+    var bowerDeps = wiredep({
+        directory: appDir + 'vendors',
+        dependencies: true,
+        devDependencies: true
+    });
+    var testGlob = bowerDeps.js.concat(scriptsGlob, [testDir + 'unit/*']);
+    return gulp.src(testGlob)
+        .pipe(karma({
+            basePath: '..',
+            configFile: testDir + 'karma.conf.js',
+            action: 'run'
+        }))
+        .on('error', function(err) {
+            throw err;
+        });
 });
 
 gulp.task('default', ['app', 'connect', 'watch']);
