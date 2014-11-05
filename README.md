@@ -2,7 +2,7 @@
 [![Bower version](https://img.shields.io/badge/bower-v0.0.2-brightgreen.svg)](https://github.com/NullRefExcep/AngularFormus/releases)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://tldrlegal.com/license/mit-license)
 
-Easy and extensible forms generator for AngularJS
+Customizable and extensible forms generator for AngularJS. License under MIT License.
 ## Usage
 Form directive render form by configuration:
 ```html
@@ -55,7 +55,7 @@ form = {
 }
 ```
 ### Field configuration
-Form must has one general field, which contain others fields
+Form must has one general field, which contain others fields.
 Example of field declaration:
 ```js
 {
@@ -65,11 +65,11 @@ Example of field declaration:
   input:'typeOfInput' // string 
 }
 ```
-Each field can contain own nested fields.
-All field attributes are optional except `input`
-If `name` attributes don't set, that field must conatain nested fields (attribute `fields`)
-You can add custom attributes, they are available in view at object config
-For field can be override linker. E.g:
+Fields can contain nested fields.
+All field attributes are optional except `input`.
+If attribute `name` isn't set, that field must contain nested fields (attribute `fields`).
+You can add custom attributes, they are available in view at object config.
+Linker can be overriden. E.g:
 ```js
 {
   name:'name',
@@ -86,11 +86,11 @@ For field can be override linker. E.g:
 
 ### Customization
 
-Formus allow customize all elements of module
+Formus supports customization of all module elements.
 
 #### Templates
 
-You can add or override own input templates, just register template in FormusTemplatesProvider:
+To change input template just register it in `FormusTemplatesProvider`:
 ```js
 app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
   FormusTemplatesProvider.setTemplateUrl('color', 'views/formus/inputs/color.html');
@@ -101,17 +101,17 @@ app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
 ```
 
 #### Validation
-Formus allow validate inputs. Validators list can setted to every field. For example:
+Formus supports data validation. Validators can be attached to every field.
 ```js
 {
   name: 'title',
   input: 'textbox',
   validators: {
-    required: true /** Key - validator name, Value - options 
+    required: true /** Key - validator name, Value - options **/
   }
 }
 ``` 
-Available validators contained in FormusValidator service.
+Available validators is contained in `FormusValidator` service.
 Example of adding custom validator:
 ```js
 app.config(['FormusValidatorProvider', function (FormusValidatorProvider) {
@@ -130,7 +130,7 @@ app.config(['FormusValidatorProvider', function (FormusValidatorProvider) {
   });
 }]);
 ```
-Validator function can takes three params:
+Validator function can take three parameters:
 - field value
 - field config
 - validator options
@@ -141,26 +141,26 @@ validators: {numeric: {min:0}}
 ```
 
 ##### Events
-Formus has validation event on end validation:
+Formus emit an event after validation:
 ```js
 $rootScope.$on('Formus.validatedForm', function(event, name, isValid) {
   /*Some stuff*/
 });
 ``` 
-Alos You can validate form without submit:
+To validate form without submit:
 ```js
 $rootScope.$broadcast('Formus.validateForm', 'myFormName');
 ```
 
 #### Display back-end errors
-For showing errors that return from server You can use attribute `errors` in `formus-form` directive.
+For showing errors that return from server you can use attribute `errors` in `formus-form` directive.
 Errors must be object with properties named as form fields and errors it's array of strings, e.g: 
 ```js
 {
   name:['Name must be longer']
 }
 ```
-FormusHelper has special method for extracting errors from response, it compatibility with Yii2 response.
+`FormusHelper` has special method for extracting errors from response.
 Example of setting errors:
 ```js
 form.config.submit.handler = function() {
@@ -174,7 +174,7 @@ form.config.submit.handler = function() {
 
 #### Default Configurations
 
-FormusConfig service allows to set default configurations for every type of input.
+`FormusConfig` service allows to set default configurations for every type of input.
 Setter take two params:
 - name of filed
 - callback which must return config object
@@ -226,7 +226,7 @@ As result get model:
 }
 
 ```
-Also You can use dot notation:
+You can use dot notation:
 ```js
 form = {
     fieldsets: {
@@ -253,7 +253,7 @@ Result model:
 
 #### Forms Container
 
-For comfortable work with large number of forms You can use FormusContainer.
+For comfortable work with large number of forms you can use `FormusContainer`.
 This service provide global storage for form configs.
 Configuration:
 ```js
@@ -264,14 +264,13 @@ app.config(['FormusContainerProvider', 'FORMS_CONFIG', function (FormusContainer
   FormusContainerProvider.setContainer(FORMS_CONFIG);
 }]);
 ```
-After configuration You can use FormusContainer in controller:
+After configuration you can use `FormusContainer` in controller:
 ```js
 var myCtrl = function($scope, FormusContainer){
     $scope.form = FormusContainer.get('form1');
 }
 ```
-Before get form config, FormusContainer merge it with default. This allow You to declare only necessary properties of forms. Not declared properties will have default values.
-To change the default values must be configured FormusConfig (set with key `form`):
+Default configuration of form can be set using `FormusConfig`.
 ```js
 app.config(['FormusConfigProvider', function (FormusConfigProvider) {
   FormusConfigProvider.set('form', function () {
@@ -313,9 +312,4 @@ app.config(['FormusLinkerProvider', function (FormusLinkerProvider) {
     });
 }]);
 ```
-It's easy way to create Your custom input types
-
-## License
-The MIT License
-
 
