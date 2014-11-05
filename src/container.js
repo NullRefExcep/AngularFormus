@@ -20,6 +20,9 @@ formus.provider('FormusContainer', function() {
                 if (!form.name) {
                     form.name = name;
                 }
+                if (angular.isDefined(form.parent)){
+                   form = helper.extendDeep(get(form.parent), angular.copy(form));
+                }
             } else {
                 log.error('Form configuration with name "' + name + '" don\'t found in configuration container');
             }
