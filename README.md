@@ -286,6 +286,21 @@ app.config(['FormusConfigProvider', function (FormusConfigProvider) {
   });
 }]);
 ```
+To extend a form configuration you can specify attribute `parent`. Formus will search container for form with that name and use its configuration.
+```js
+{
+    //form containter
+    parent: {
+        config:{
+            submit:{title:'Find'}
+        }
+    },
+    child: {
+        parent:'parent'
+    }
+}
+```
+
 #### Linkers
 
 You can set custom linkers for special input types:
