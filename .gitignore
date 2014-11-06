@@ -1,6 +1,0 @@
-.tmp
-.idea
-node_modules
-build
-app/vendors/*
-npm-debug.log
