@@ -1,13 +1,13 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Angular Formus by NullRefExcep</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <link rel="stylesheet" href="stylesheets/styles.css">
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -16,380 +16,67 @@
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-  </head>
-  <body>
-      <div id="header">
+</head>
+
+<body>
+    <div id="header">
         <nav>
-          <li class="fork"><a href="https://github.com/NullRefExcep/AngularFormus">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/NullRefExcep/AngularFormus/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/NullRefExcep/AngularFormus/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
+            <li class="fork"><a href="https://github.com/NullRefExcep/AngularFormus">View On GitHub</a>
+            </li>
+            <li class="downloads"><a href="https://github.com/NullRefExcep/AngularFormus/zipball/master">ZIP</a>
+            </li>
+            <li class="downloads"><a href="https://github.com/NullRefExcep/AngularFormus/tarball/master">TAR</a>
+            </li>
+            <li class="title">DOWNLOADS</li>
         </nav>
-      </div><!-- end header -->
+    </div>
+    <!-- end header -->
 
-    <div class="wrapper">
+    <div class="container" ng-app="app">
+        <div class="row">
+            <section class="col-md-12">
+                <div id="title">
+                    <h1>Angular Formus</h1>
+                    <p>Form generator for AngularJS</p>
+                    <hr>
+                    <span class="credits left">Project maintained by <a href="https://github.com/NullRefExcep">NullRefExcep</a>
+                    </span>
+                    <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a>
+                    </span>
+                </div>
 
-      <section>
-        <div id="title">
-          <h1>Angular Formus</h1>
-          <p>Form generator for AngularJS</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/NullRefExcep">NullRefExcep</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+                <p class="lead">Customizable and extensible forms generator for AngularJS. License under MIT License.</p>
+            </section>
+        </div>
+        <div class="row" id="getting-started" ng-controller="MainCtrl">
+            <div class="col-md-3">
+                <h4>Model</h4>
+                <pre>{{form.data | json}}</pre>
+            </div>
+            <div class="col-md-5">
+                <h4>Simple form</h4>
+                <formus-form config="form.config" model="form.data" fieldset="form.fieldset"></formus-form>
+            </div>
+            <div class="col-md-4">
+                <h4>JSON configuration</h4>
+                <pre>{{src | json}}</pre>
+            </div>
         </div>
 
-        <h1>
-<a id="angular-formus" class="anchor" href="#angular-formus" aria-hidden="true"><span class="octicon octicon-link"></span></a>Angular Formus</h1>
 
-<p>Customizable and extensible forms generator for AngularJS. License under MIT License.</p>
 
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Form directive render form by configuration:</p>
+        <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.min.js"></script>
 
-<div class="highlight highlight-html"><pre>&lt;<span class="nt">formus</span><span class="na">-form</span> <span class="na">name</span>=<span class="s2">"form.name"</span> 
-    <span class="na">model</span>=<span class="s2">"form.data"</span> 
-    <span class="na">fieldsets</span>=<span class="s2">"form.fieldsets"</span> 
-    <span class="na">config</span>=<span class="s2">"form.config"</span>&gt;
-&lt;/<span class="nt">formus</span><span class="na">-form</span>&gt;</pre></div>
+        <script src="javascripts/respond.js"></script>
+        <script src="javascripts/formus.js"></script>
+        <script src="javascripts/templates.js"></script>
+        <script src="javascripts/forms.js"></script>
+        <script src="javascripts/app.js"></script>
+</body>
 
-<h3>
-<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h3>
-
-<pre><code>$ bower install -S angular-formus
-</code></pre>
-
-<p>Add a <code>&lt;script&gt;</code> to your <code>index.html</code>:</p>
-
-<div class="highlight highlight-html"><pre>&lt;<span class="nt">script</span> <span class="na">src</span>=<span class="s2">"/bower_components/angular-formus/dist/formus.min.js"</span>&gt;&lt;/<span class="nt">script</span>&gt;</pre></div>
-
-<p>and add Formus module as dependency to Your application:</p>
-
-<div class="highlight highlight-js"><pre>angular.module(<span class="s1">'app'</span>, [<span class="s1">'formus'</span>]);</pre></div>
-
-<h3>
-<a id="form-configuration" class="anchor" href="#form-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Form configuration</h3>
-
-<p>Example:</p>
-
-<div class="highlight highlight-js"><pre>form <span class="o">=</span> {
-    name<span class="o">:</span> <span class="s2">"systemParametersForm"</span>,
-    fieldsets<span class="o">:</span> {
-        fields<span class="o">:</span> [{
-            <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"movePayments"</span>,
-            <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Move Payments Straight To Cash"</span>,
-            <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"checkbox"</span>
-        }, {
-            <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"cancelPendingAfter"</span>,
-            <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Automatically Cancel Pending Mode Bookings after"</span>,
-            <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"textbox"</span>,
-            <span class="s2">"suffix"</span><span class="o">:</span> <span class="s2">"days"</span>
-        }]
-    },
-    config<span class="o">:</span> {
-        class<span class="o">:</span> <span class="s1">'some-css-class'</span>,
-        submit<span class="o">:</span> {
-            title<span class="o">:</span> <span class="s1">'Save'</span>,
-            <span class="nf">handler</span>: <span class="kt">function</span>() {
-                <span class="nc">console</span><span class="nf">.log</span>(<span class="s1">'I<span class="sc">\'</span>m submitted'</span>);
-            }
-        }
-    }
-}</pre></div>
-
-<h3>
-<a id="field-configuration" class="anchor" href="#field-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Field configuration</h3>
-
-<p>Form must has one general field, which contain others fields.
-Example of field declaration:</p>
-
-<div class="highlight highlight-js"><pre>{
-  name<span class="o">:</span><span class="s1">'nameOfFieldInModel'</span>, <span class="c1">// string</span>
-  label<span class="o">:</span> <span class="s1">'label'</span>, <span class="c1">// string</span>
-  fields<span class="o">:</span> [] <span class="c1">//array of objects</span>
-  input<span class="o">:</span><span class="s1">'typeOfInput'</span> <span class="c1">// string </span>
-}</pre></div>
-
-<p>Fields can contain nested fields.
-All field attributes are optional except <code>input</code>.
-If attribute <code>name</code> isn't set, that field must contain nested fields (attribute <code>fields</code>).
-You can add custom attributes, they are available in view at object config.
-Linker can be overriden. E.g:</p>
-
-<div class="highlight highlight-js"><pre>{
-  name<span class="o">:</span><span class="s1">'name'</span>,
-  <span class="nf">linker</span>:<span class="kt">function</span>(<span class="nv">$scope</span>, <span class="nv">$element</span>, <span class="nv">$attr</span>, <span class="nv">$http</span> /**Some other services**){}
-}</pre></div>
-
-<h3>
-<a id="available-inputs" class="anchor" href="#available-inputs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available inputs</h3>
-
-<ul>
-<li>fieldset (container for other fields)</li>
-<li>textbox</li>
-<li>texarea</li>
-<li>select</li>
-<li>checkbox </li>
-</ul>
-
-<h3>
-<a id="customization" class="anchor" href="#customization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customization</h3>
-
-<p>Formus supports customization of all module elements.</p>
-
-<h4>
-<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Templates</h4>
-
-<p>To change input template just register it in <code>FormusTemplatesProvider</code>:</p>
-
-<div class="highlight highlight-js"><pre>app.config([<span class="s1">'FormusTemplatesProvider'</span>, <span class="kt">function</span> (<span class="nv">FormusTemplatesProvider</span>) {
-  FormusTemplatesProvider.setTemplateUrl(<span class="s1">'color'</span>, <span class="s1">'views/formus/inputs/color.html'</span>);
-  FormusTemplatesProvider.setTemplateUrl(<span class="s1">'group'</span>, <span class="s1">'views/formus/inputs/group.html'</span>);
-  FormusTemplatesProvider.setTemplateUrl(<span class="s1">'file'</span>, <span class="s1">'views/formus/inputs/file.html'</span>);
-  FormusTemplatesProvider.setTemplateUrl(<span class="s1">'gallery'</span>, <span class="s1">'views/formus/inputs/gallery.html'</span>);
-}]);</pre></div>
-
-<h4>
-<a id="validation" class="anchor" href="#validation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validation</h4>
-
-<p>Formus supports data validation. Validators can be attached to every field.</p>
-
-<div class="highlight highlight-js"><pre>{
-  name<span class="o">:</span> <span class="s1">'title'</span>,
-  input<span class="o">:</span> <span class="s1">'textbox'</span>,
-  validators<span class="o">:</span> {
-    required<span class="o">:</span> <span class="kc">true</span> <span class="cm">/** Key - validator name, Value - options **/</span>
-  }
-}</pre></div>
-
-<p>Available validators is contained in <code>FormusValidator</code> service.
-Example of adding custom validator:</p>
-
-<div class="highlight highlight-js"><pre>app.config([<span class="s1">'FormusValidatorProvider'</span>, <span class="kt">function</span> (<span class="nv">FormusValidatorProvider</span>) {
-  FormusValidatorProvider.set(<span class="s1">'numeric'</span>, <span class="kt">function</span> (<span class="nv">value</span>, <span class="nv">config</span>, <span class="nv">arg</span>) {
-    <span class="k">if</span> (value) {
-      <span class="k">if</span> (<span class="o">!</span>tools.validateNumerical(value)) {
-        <span class="k">return</span> config.<span class="no">label</span> <span class="o">+</span> <span class="s1">' must be numerical'</span>;
-      }
-      <span class="k">if</span> (<span class="o">typeof</span>(arg) <span class="o">===</span> <span class="s1">'object'</span>) {
-        <span class="k">if</span> ((angular.isDefined(arg.min)) <span class="o">&amp;&amp;</span> (value <span class="o">&lt;</span> arg.min)) {
-          <span class="k">return</span> config.<span class="no">label</span> <span class="o">+</span> <span class="s1">' must be &gt; '</span> <span class="o">+</span> arg.min;
-        }
-      }
-    }
-    <span class="k">return</span> <span class="kc">null</span>;
-  });
-}]);</pre></div>
-
-<p>Validator function can take three parameters:</p>
-
-<ul>
-<li>field value</li>
-<li>field config</li>
-<li>validator options</li>
-</ul>
-
-<p>This validator can take options as object with property <code>min</code>, e.g:</p>
-
-<div class="highlight highlight-js"><pre>validators<span class="o">:</span> {numeric<span class="o">:</span> {min<span class="o">:</span><span class="m">0</span>}}</pre></div>
-
-<h5>
-<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h5>
-
-<p>Formus emit an event after validation:</p>
-
-<div class="highlight highlight-js"><pre>$rootScope.$on(<span class="s1">'Formus.validatedForm'</span>, <span class="kt">function</span>(<span class="nv">event</span>, <span class="nv">name</span>, <span class="nv">isValid</span>) {
-  <span class="cm">/*Some stuff*/</span>
-});</pre></div>
-
-<p>To validate form without submit:</p>
-
-<div class="highlight highlight-js"><pre>$rootScope.$broadcast(<span class="s1">'Formus.validateForm'</span>, <span class="s1">'myFormName'</span>);</pre></div>
-
-<h4>
-<a id="display-back-end-errors" class="anchor" href="#display-back-end-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Display back-end errors</h4>
-
-<p>For showing errors that return from server you can use attribute <code>errors</code> in <code>formus-form</code> directive.
-Errors must be object with properties named as form fields and errors it's array of strings, e.g: </p>
-
-<div class="highlight highlight-js"><pre>{
-  name<span class="o">:</span>[<span class="s1">'Name must be longer'</span>]
-}</pre></div>
-
-<p><code>FormusHelper</code> has special method for extracting errors from response.
-Example of setting errors:</p>
-
-<div class="highlight highlight-js"><pre><span class="no">form.config.submit</span>.<span class="nf">handler</span> <span class="o">=</span> <span class="kt">function</span>() {
-  <span class="k">return</span> save().then(<span class="kt">function</span>() {
-     $state.<span class="nf">go</span>(<span class="s1">'^.list'</span>);
-  }).catch(<span class="kt">function</span>(<span class="nv">response</span>) {
-    form.errors <span class="o">=</span> FormusHelper.extractBackendErrors(response);
-  });
-};</pre></div>
-
-<h4>
-<a id="default-configurations" class="anchor" href="#default-configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default Configurations</h4>
-
-<p><code>FormusConfig</code> service allows to set default configurations for every type of input.
-Setter take two params:</p>
-
-<ul>
-<li>name of filed</li>
-<li>callback which must return config object</li>
-</ul>
-
-<div class="highlight highlight-js"><pre>app.config([<span class="s1">'FormusConfigProvider'</span>, <span class="kt">function</span> (<span class="nv">FormusConfigProvider</span>) {
-  FormusConfigProvider.set(<span class="s1">'datetime'</span>, <span class="kt">function</span> () {
-    <span class="k">return</span> {
-      minView<span class="o">:</span> <span class="m">0</span>,
-      startView<span class="o">:</span> <span class="m">0</span>,
-      dataType<span class="o">:</span> <span class="s1">'number'</span>,
-      dateFormat<span class="o">:</span> <span class="s1">'shortDate'</span>
-    }
-  });
-}]);</pre></div>
-
-<h3>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h3>
-
-<h4>
-<a id="nested-fields" class="anchor" href="#nested-fields" aria-hidden="true"><span class="octicon octicon-link"></span></a>Nested fields:</h4>
-
-<p>You can create form with nested fields:</p>
-
-<div class="highlight highlight-js"><pre>form <span class="o">=</span> {
-    fieldsets<span class="o">:</span> {
-        fields<span class="o">:</span> [
-            {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"val0"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Text Value"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"checkbox"</span>},
-            {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"someExtend"</span>, <span class="s2">"fields"</span><span class="o">:</span> [
-                    {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"val1"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Nested Value #1"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"textbox"</span>},
-                    {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"val2"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Nested Value #2"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"select"</span>,<span class="s2">"items"</span><span class="o">:</span>  [
-                            {<span class="s2">"value"</span><span class="o">:</span><span class="m">1</span>, <span class="s2">"title"</span><span class="o">:</span><span class="s2">"opt 1"</span>},
-                            {<span class="s2">"value"</span><span class="o">:</span><span class="m">2</span>, <span class="s2">"title"</span><span class="o">:</span><span class="s2">"opt 2"</span>}
-                        ]
-                    },
-                ]
-            }
-        ]
-    }
-};</pre></div>
-
-<p>As result get model:</p>
-
-<div class="highlight highlight-js"><pre>{
-    val0<span class="o">:</span> <span class="kc">true</span>,
-    someExtend<span class="o">:</span>{
-        val1<span class="o">:</span> <span class="s1">'some text'</span>,
-        val2<span class="o">:</span> <span class="m">2</span>
-    }
-}
-</pre></div>
-
-<p>You can use dot notation:</p>
-
-<div class="highlight highlight-js"><pre>form <span class="o">=</span> {
-    fieldsets<span class="o">:</span> {
-        fields<span class="o">:</span> [
-            {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"base.first"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Some Value"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"textbox"</span>},
-            {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"base.second"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Some Value#2"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"textbox"</span>},
-            {<span class="s2">"name"</span><span class="o">:</span> <span class="s2">"other.value"</span>, <span class="s2">"label"</span><span class="o">:</span> <span class="s2">"Some Value#3"</span>, <span class="s2">"input"</span><span class="o">:</span> <span class="s2">"checkbox"</span>},
-        ]
-    }
-};</pre></div>
-
-<p>Result model:</p>
-
-<div class="highlight highlight-js"><pre>{
-    base<span class="o">:</span>{
-        first<span class="o">:</span> <span class="s1">'text val'</span>,
-        first<span class="o">:</span> <span class="s1">'text val2'</span>,
-    },
-    other<span class="o">:</span>{
-        value<span class="o">:</span> <span class="kc">false</span>
-    }
-}</pre></div>
-
-<h4>
-<a id="forms-container" class="anchor" href="#forms-container" aria-hidden="true"><span class="octicon octicon-link"></span></a>Forms Container</h4>
-
-<p>For comfortable work with large number of forms you can use <code>FormusContainer</code>.
-This service provide global storage for form configs.
-Configuration:</p>
-
-<div class="highlight highlight-js"><pre><span class="k">var</span> formsConfiguration <span class="o">=</span> {form1<span class="o">:</span>{<span class="cm">/**...**/</span>}, form2<span class="o">:</span>{<span class="cm">/**...**/</span>}};
-app.constant(<span class="s1">'FORMS_CONFIG'</span>, formsConfiguration);
-
-app.config([<span class="s1">'FormusContainerProvider'</span>, <span class="s1">'FORMS_CONFIG'</span>, <span class="kt">function</span> (<span class="nv">FormusContainerProvider</span>, <span class="nv">FORMS_CONFIG</span>) {
-  FormusContainerProvider.setContainer(FORMS_CONFIG);
-}]);</pre></div>
-
-<p>After configuration you can use <code>FormusContainer</code> in controller:</p>
-
-<div class="highlight highlight-js"><pre><span class="k">var</span> <span class="nf">myCtrl</span> <span class="o">=</span> <span class="kt">function</span>(<span class="nv">$scope</span>, <span class="nv">FormusContainer</span>){
-    $scope.<span class="no">form</span> <span class="o">=</span> FormusContainer.get(<span class="s1">'form1'</span>);
-}</pre></div>
-
-<p>Default configuration of form can be set using <code>FormusConfig</code>.</p>
-
-<div class="highlight highlight-js"><pre>app.config([<span class="s1">'FormusConfigProvider'</span>, <span class="kt">function</span> (<span class="nv">FormusConfigProvider</span>) {
-  FormusConfigProvider.set(<span class="s1">'form'</span>, <span class="kt">function</span> () {
-    <span class="k">return</span> {
-        name<span class="o">:</span> <span class="s1">'default-name'</span>,
-        fieldset<span class="o">:</span> { fields<span class="o">:</span> [] },
-        data<span class="o">:</span> {},
-        config<span class="o">:</span> {
-            buttons<span class="o">:</span> [],
-            submit<span class="o">:</span> { title<span class="o">:</span> <span class="s1">'Save'</span>, <span class="nf">handler</span>: <span class="kt">function</span>() {} }
-        }
-    }
-  });
-}]);</pre></div>
-
-<p>To extend a form configuration you can specify attribute <code>parent</code>. Formus will search container for form with that name and use its configuration.</p>
-
-<div class="highlight highlight-js"><pre>{
-    <span class="c1">//form containter</span>
-    parent<span class="o">:</span> {
-        config<span class="o">:</span>{
-            submit<span class="o">:</span>{title<span class="o">:</span><span class="s1">'Find'</span>}
-        }
-    },
-    child<span class="o">:</span> {
-        parent<span class="o">:</span><span class="s1">'parent'</span>
-    }
-}</pre></div>
-
-<h4>
-<a id="linkers" class="anchor" href="#linkers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linkers</h4>
-
-<p>You can set custom linkers for special input types:</p>
-
-<div class="highlight highlight-js"><pre>app.config([<span class="s1">'FormusLinkerProvider'</span>, <span class="kt">function</span> (<span class="nv">FormusLinkerProvider</span>) {
-    FormusLinkerProvider.setLinker(<span class="s1">'gallery'</span>, <span class="kt">function</span> (<span class="nv">$scope</span>, <span class="nv">$element</span>, <span class="nv">fileUpload</span>) {
-        <span class="no">$scope</span>.<span class="nf">uploadImage</span> <span class="o">=</span> <span class="kt">function</span> () {
-          <span class="k">if</span> (fileUpload.isValid($element.<span class="nf">find</span>(<span class="s1">'.imgFileInput'</span>))) {
-            <span class="nf">alert</span>(<span class="s1">'Select file'</span>);
-          } <span class="k">else</span> {
-            fileUpload.upload($element.<span class="nf">find</span>(<span class="s1">'.imgFileInput'</span>)).then(<span class="kt">function</span> (<span class="nv">response</span>) {
-              $scope.model.<span class="nf">push</span>(response.<span class="no">data</span>.url);
-            });
-          }
-        };
-        <span class="no">$scope</span>.<span class="nf">removeImage</span> <span class="o">=</span> <span class="kt">function</span> (<span class="nv">index</span>) {
-          $scope.model.<span class="nf">splice</span>(index, <span class="m">1</span>);
-        };
-        <span class="no">$scope</span>.<span class="nf">afterLoadTemplate</span> <span class="o">=</span> <span class="kt">function</span> () {
-          <span class="k">if</span> (<span class="o">!</span><span class="no">Array</span>.isArray($scope.model)) {
-            $scope.model <span class="o">=</span> [];
-          }
-        }
-    });
-}]);</pre></div>
-      </section>
-
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
 </html>
