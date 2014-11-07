@@ -711,6 +711,11 @@ dt {
     float: left;
     margin-left: 0px;
 }
+#header nav li.github {
+    float: left;
+    margin-left: 0px;
+    padding: 10px 15px;
+}
 #header nav li.downloads {
     float: right;
     margin-left: 6px;
@@ -790,6 +795,16 @@ section #title .credits.right {
 .margin-bottom-5 {
     margin-bottom: 5px;
 }
+.margin-top-10 {
+    margin-top: 10px;
+}
 .no-margin {
     margin: 0;
+}
+.large_code{
+    overflow-x: scroll;
+}
+.large_code .code {
+    width: 850px;
+    margin-bottom: 0;
 }

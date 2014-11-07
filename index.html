@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Angular Formus by NullRefExcep</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/railscasts.min.css" />
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <link rel="stylesheet" href="stylesheets/styles.css">
     <!--[if lt IE 9]>
@@ -22,6 +23,10 @@
     <div id="header">
         <nav>
             <li class="fork"><a href="https://github.com/NullRefExcep/AngularFormus">View On GitHub</a>
+            </li>
+            <li class="github">
+                <iframe src="http://ghbtns.com/github-btn.html?user=NullRefExcep&amp;repo=AngularFormus&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="130px" height="30px"></iframe>
+                <iframe src="http://ghbtns.com/github-btn.html?user=NullRefExcep&amp;repo=AngularFormus&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
             </li>
             <li class="downloads"><a href="https://github.com/NullRefExcep/AngularFormus/zipball/master">ZIP</a>
             </li>
@@ -44,29 +49,65 @@
                     <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a>
                     </span>
                 </div>
-
                 <p class="lead no-margin">Customizable and extensible forms generator for AngularJS. License under MIT License.</p>
             </section>
         </div>
         <div class="row" id="getting-started" ng-controller="MainCtrl">
             <div class="col-md-3">
                 <h4>Model</h4>
-                <pre>{{form.data | json}}</pre>
+                <pre hljs>{{form.data | json}}</pre>
             </div>
             <div class="col-md-5">
                 <h4>Simple form</h4>
                 <formus-form config="form.config" model="form.data" fieldset="form.fieldset"></formus-form>
+                <div class="margin-top-10">
+                    <h4>Install</h4>
+                    <pre class="code bash">$ bower install -S angular-formus</pre>
+                    <h4>Include in index.html</h4>
+                    <pre class="code html">&lt;script src=&quot;/bower_components/angular-formus/dist/formus.min.js&quot;&gt;&lt;/script&gt;</pre>
+                    <h4>Application configuration</h4>
+                    <pre class="code javascript">var app = angular.module('app', ['formus',]);</pre>
+                    <h4>Object with configs</h4>
+                    <pre class="code javascript">var formsConfiguration = {
+    firstForm: {/* Config */}
+};</pre>
+                    <pre class="code javascript">app.constant('F_CONFIG', formsConfiguration);</pre>
+
+                    <pre class="code">app.config(['FormusContainerProvider','F_CONFIG', 
+    function(FCP, FC) {FCP.setContainer(FC);}
+]);</pre>
+                </div>
+                <div>
+                    <h4>Controller</h4>
+                    <div class="large_code">
+                        <pre class="code javascript">
+app.controller('MainCtrl', function($scope, FormusContainer, FormusHelper, FORMS_CONFIG, $http) {
+    var form = $scope.form = FormusContainer.get('firstForm');
+    $scope.src = FORMS_CONFIG.firstForm;
+    form.config.buttons[0].handler = function() {
+        $http.get('https://api.github.com/users').success(function(data) {
+            form.fieldset.fields[4].items = FormusHelper.extractItems(data, 'id', 'login');
+        });
+    };
+});
+                    </pre>
+                    </div>
+                </div>
             </div>
             <div class="col-md-4">
                 <h4>JSON configuration</h4>
-                <pre>{{src | json}}</pre>
+                <pre class="code">{{src | json}}</pre>
             </div>
         </div>
 
 
 
 
+
         <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/javascript.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -74,7 +115,6 @@
 
         <script src="javascripts/respond.js"></script>
         <script src="javascripts/formus.js"></script>
-        <script src="javascripts/templates.js"></script>
         <script src="javascripts/forms.js"></script>
         <script src="javascripts/app.js"></script>
 </body>

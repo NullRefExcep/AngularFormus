@@ -1,5 +1,5 @@
 var app = angular.module('app', [
-    'formus',
+    'formus'
 ]);
 
 app.constant('FORMS_CONFIG', formsConfiguration);
@@ -34,3 +34,11 @@ app.config(['FormusValidatorProvider', function(FormusValidatorProvider) {
         return null;
     });
 }]);
+
+$(function() {
+    hljs.configure({language: "javascript"});
+
+    $('.code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+});
