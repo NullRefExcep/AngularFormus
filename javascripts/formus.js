@@ -37,8 +37,7 @@ formus.provider('FormusConfig', function($logProvider) {
             return {
                 showLabel: false,
                 trueValue: true,
-                falseValue: false,
-                default: false
+                falseValue: false
             }
         },
         radio: function() {
@@ -108,9 +107,6 @@ formus.provider('FormusContainer', function() {
                 form = container[name];
                 if (!form.name) {
                     form.name = name;
-                }
-                if (angular.isDefined(form.parent)){
-                   form = helper.extendDeep(get(form.parent), angular.copy(form));
                 }
             } else {
                 log.error('Form configuration with name "' + name + '" don\'t found in configuration container');
@@ -732,3 +728,11 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
     };
 });
 })();
+angular.module("formus").run(["$templateCache", function($templateCache) {$templateCache.put("formus/form.html","<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if=config.showErrors></div></header><formus-field ng-model=model errors=errors config=fieldset></formus-field><footer><div ng-repeat=\"btn in config.buttons\" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=btn.handler()>{{btn.title}}</button><div class=\"btn-group margin-left-5\" ng-if=btn.items><button class=\"{{btn.class}} dropdown-toggle\" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat=\"item in btn.items\"><a ng-click=item.handler()>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>");
+$templateCache.put("formus/inputs/checkbox.html","<div class=checkbox><label><input type=checkbox ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} ng-model=model name={{config.name}}>{{config.label}}</label></div>");
+$templateCache.put("formus/inputs/fieldset.html","<div class=row><formus-wrapper ng-repeat=\"field in config.fields\" class={{config.wrapClass}}><formus-field ng-model=model errors=errors config=field></formus-field></formus-wrapper></div>");
+$templateCache.put("formus/inputs/radio.html","<div ng-if=!config.inline><div class=radio ng-repeat=\"item in config.items\"><label><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div></div><div ng-if=config.inline><label class=\"radio radio-inline\" ng-repeat=\"item in config.items\"><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div>");
+$templateCache.put("formus/inputs/select.html","<select name={{config.name}} ng-model=model class=form-control style={{config.style}} id={{config.name}} ng-options=\"item.value as item.title for item in config.items\"><option value ng-if=config.empty>{{config.empty}}</option></select>");
+$templateCache.put("formus/inputs/textarea.html","<textarea ng-readonly=config.readonly class=form-control placeholder={{config.placeholder?config.placeholder:config.label}} rows={{config.rows}} ng-model=model name={{config.name}} id={{config.name}} style={{config.style}}></textarea>");
+$templateCache.put("formus/inputs/textbox.html","<div ng-class=\"{\'input-group\': config.addon}\"><div class=input-group-addon ng-if=config.addon ng-bind=config.addon></div><input ng-readonly=config.readonly ng-model=model class=form-control id={{config.name}} name={{config.name}} placeholder={{config.placeholder?config.placeholder:config.label}}></div>");
+$templateCache.put("formus/inputs/wrapper.html","<div class=\"form-group margin-bottom-5 col-md-12\" ng-class=\"{\'has-error\': input.error}\"><label for={{input.config.name}} ng-show=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude></div><span class=help-block ng-repeat=\"e in input.error\" ng-bind=e></span></div>");}]);
