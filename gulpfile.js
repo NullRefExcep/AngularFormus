@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
+    ngmin = require('gulp-ngmin'),
     connect = require('gulp-connect'),
     minifyHTML = require('gulp-minify-html'),
     karma = require('gulp-karma'),
@@ -53,9 +54,10 @@ gulp.task('app', ['build'], function() {
 gulp.task('dist', ['build'], function() {
     gulp.src(buildGlob)
         .pipe(concat('formus.js'))
+        .pipe(ngmin())
         .pipe(gulp.dest(distDir))
-        .pipe(rename('formus.min.js'))
-        .pipe(uglify())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(uglify({mangle: false}))
         .pipe(gulp.dest(distDir));
 
 });

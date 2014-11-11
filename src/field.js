@@ -113,13 +113,6 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
                         $ngModelCtrl: ngModelCtrl
                     });
                 }
-                $scope.$watch('config.hide', function(newVal) {
-                    if (newVal) {
-                        $element.hide();
-                    } else {
-                        $element.show();
-                    }
-                });
             };
             /** Wait when config will be defined */
             var listener = $scope.$watch('config', function() {
