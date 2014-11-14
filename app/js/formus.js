@@ -254,20 +254,8 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             $scope.isValid = true;
             $scope.errorList = [];
 
-            var addErrors = function(errors) {
-                if (Array.isArray(errors)) {
-                    if (_.each(errors, function(item) {
-                            $scope.errorList.push(item);
-                        }));
-                } else {
-                    _.each(errors, function(item) {
-                        addErrors(item);
-                    });
-                }
-            }
             $scope.$watch('errors', function(newValue) {
-                $scope.errorList = [];
-                addErrors(newValue);
+                $scope.errorList = FormusHelper.getErrorsList(newValue);
                 $scope.isValid = $scope.errorList.length === 0;
             }, true);
             FormusLinker.formLinker({
@@ -327,6 +315,28 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
  * Service with specific functions
  */
 formus.factory('FormusHelper', function() {
+    /**
+     * Create error array form error object
+     */
+    var getErrorsList = function(object) {
+
+        var errorList = [];
+
+        var addErrors = function(errors) {
+            if (Array.isArray(errors)) {
+                if (_.each(errors, function(item) {
+                        errorList.push(item);
+                    }));
+            } else {
+                _.each(errors, function(item) {
+                    addErrors(item);
+                });
+            }
+        }
+        addErrors(object);
+        return errorList;
+    }
+
     /**
      * Extract error object from server response
      */
@@ -454,10 +464,9 @@ formus.factory('FormusHelper', function() {
         });
         return list;
     };
-    window.getNested = getNested;
-    window.setNested = setNested;
 
     return {
+        getErrorsList: getErrorsList,
         setNested: setNested,
         getNested: getNested,
         initModel: initModel,

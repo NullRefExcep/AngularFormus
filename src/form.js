@@ -15,20 +15,8 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             $scope.isValid = true;
             $scope.errorList = [];
 
-            var addErrors = function(errors) {
-                if (Array.isArray(errors)) {
-                    if (_.each(errors, function(item) {
-                            $scope.errorList.push(item);
-                        }));
-                } else {
-                    _.each(errors, function(item) {
-                        addErrors(item);
-                    });
-                }
-            }
             $scope.$watch('errors', function(newValue) {
-                $scope.errorList = [];
-                addErrors(newValue);
+                $scope.errorList = FormusHelper.getErrorsList(newValue);
                 $scope.isValid = $scope.errorList.length === 0;
             }, true);
             FormusLinker.formLinker({
