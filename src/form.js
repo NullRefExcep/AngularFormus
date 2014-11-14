@@ -1,4 +1,4 @@
-formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
+formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, FormusHelper) {
     return {
         transclude: true,
         replace: true,
@@ -12,6 +12,25 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
         },
         templateUrl: FormusTemplates.getUrl('form'),
         link: function($scope, $element, $attr) {
+            $scope.isValid = true;
+            $scope.errorList = [];
+
+            var addErrors = function(errors) {
+                if (Array.isArray(errors)) {
+                    if (_.each(errors, function(item) {
+                            $scope.errorList.push(item);
+                        }));
+                } else {
+                    _.each(errors, function(item) {
+                        addErrors(item);
+                    });
+                }
+            }
+            $scope.$watch('errors', function(newValue) {
+                $scope.errorList = [];
+                addErrors(newValue);
+                $scope.isValid = $scope.errorList.length === 0;
+            }, true);
             FormusLinker.formLinker({
                 $scope: $scope,
                 $element: $element,
@@ -19,6 +38,10 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates) {
             });
         },
         controller: function($scope, $element, $rootScope) {
+            this.getScope = function() {
+                return $scope;
+            };
+
             $scope.validate = function() {
                 var deferred = $q.defer(),
                     fieldsAmount = $element.find('formus-field').length,

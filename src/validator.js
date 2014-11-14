@@ -1,3 +1,6 @@
+/** 
+ * Service for validation
+ */
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
         required: function(value, config) {

@@ -1,6 +1,5 @@
 /** 
  * Service with specific functions
- *
  */
 formus.factory('FormusHelper', function() {
     /**
@@ -8,7 +7,7 @@ formus.factory('FormusHelper', function() {
      */
     var extractBackendErrors = function(response) {
         var errors = {};
-        angular.forEach(response.data, function(error) {
+        _.each(response.data, function(error) {
             this[error.field] = [error.message];
         }, errors);
         return errors;
@@ -17,19 +16,8 @@ formus.factory('FormusHelper', function() {
     /**
      * Merge objects by recursive strategy
      */
-    var extendDeep = function extendDeep(dst) {
-        angular.forEach(arguments, function(obj) {
-            if (obj !== dst) {
-                angular.forEach(obj, function(value, key) {
-                    if (angular.isDefined(dst[key]) && dst[key].constructor && dst[key].constructor === Object && typeof(dst[key]) === 'object' && typeof(value) === 'object') {
-                        extendDeep(dst[key], value);
-                    } else {
-                        dst[key] = value;
-                    }
-                });
-            }
-        });
-        return dst;
+    var extendDeep = function extendDeep(dst, src) {
+        return _.merge(dst, src);
     };
 
     /**
@@ -40,16 +28,18 @@ formus.factory('FormusHelper', function() {
             if (!angular.isObject(model)) {
                 model = {};
             }
+            var result = model;
             var keys = name.split('.');
-            if (keys.length > 1) {
-                return setNested(model[keys[0]], keys.splice(1, keys.length).join('.'), value);
-            } else {
-                model[name] = value;
-                return value;
+            var len = keys.length;
+            for (var i = 0; i < len - 1; i++) {
+                var key = keys[i];
+                if (!model[key]) model[key] = {}
+                model = model[key];
             }
+            model[keys[len - 1]] = value;
+            return result;
         }
-        model = value;
-        return value;
+        return model = value;
     };
 
     /**
@@ -59,12 +49,18 @@ formus.factory('FormusHelper', function() {
         defaultValue = angular.isDefined(defaultValue) ? defaultValue : undefined;
         if (angular.isDefined(model)) {
             if (name) {
-                var keys = name.split('.');
-                if (keys.length > 1) {
-                    return getNested(model[keys[0]], keys.splice(1, keys.length).join('.'), defaultValue);
-                } else {
-                    return getNested(model[name], false, defaultValue);
+                if (angular.isObject(model)) {
+                    var result = model;
+                    var keys = name.split('.');
+                    for (i = 0; i < keys.length; i++) {
+                        result = result[keys[i]];
+                        if (angular.isUndefined(result)) {
+                            return defaultValue;
+                        }
+                    }
+                    return result;
                 }
+                return defaultValue;
             }
             return model;
         }
@@ -133,6 +129,8 @@ formus.factory('FormusHelper', function() {
         });
         return list;
     };
+    window.getNested = getNested;
+    window.setNested = setNested;
 
     return {
         setNested: setNested,

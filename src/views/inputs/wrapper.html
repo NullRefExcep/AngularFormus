@@ -1,6 +1,6 @@
-<div class="form-group margin-bottom-5 col-md-12" ng-class="{'has-error': input.error}">
+<div class="form-group margin-bottom-5" ng-class="{'has-error': !input.isValid}">
     <label for="{{input.config.name}}" ng-show="input.config.showLabel" ng-bind="input.config.label"></label>
     <div ng-transclude>
     </div>
-    <span class="help-block" ng-repeat="e in input.error" ng-bind="e"></span>
+    <span class="help-block" ng-if="input.config.showErrors" ng-repeat="e in input.errors" ng-bind="e"></span>
 </div>

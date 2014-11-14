@@ -1,6 +1,8 @@
 formus.provider('FormusConfig', function($logProvider) {
     var getDefault = function() {
-        return {};
+        return {
+            showErrors: true
+        };
     };
     var configs = {
         form: function() {
@@ -12,6 +14,7 @@ formus.provider('FormusConfig', function($logProvider) {
                 },
                 data: {},
                 config: {
+                    showErrors: true,
                     readonly: false,
                     buttons: [],
                     class: 'padding-top-10',
@@ -25,13 +28,15 @@ formus.provider('FormusConfig', function($logProvider) {
         },
         fieldset: function() {
             return {
+                showErrors: false
             };
         },
         checkbox: function() {
             return {
                 showLabel: false,
                 trueValue: true,
-                falseValue: false
+                falseValue: false,
+                default: false
             }
         },
         radio: function() {
@@ -66,7 +71,7 @@ formus.provider('FormusConfig', function($logProvider) {
             if (configs[name]) {
                 return configs[name]();
             }
-            $log.info('Don\'t find config for input "' + name + '"');
+           // $log.info('Don\'t find config for input "' + name + '"');
             return getDefault();
         };
         return {

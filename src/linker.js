@@ -58,7 +58,7 @@ formus.provider('FormusLinker', function() {
 
     var formLinker = function($scope, FormusHelper) {
         var listener = $scope.$watch('fieldset', function() {
-            if (typeof($scope.fieldset) !== 'undefined') {
+            if (!_.isUndefined($scope.fieldset)) {
                 $scope.model = FormusHelper.initModel($scope.model, $scope.fieldset);
                 $scope.errors = $scope.errors || {};
                 listener();
@@ -80,7 +80,7 @@ formus.provider('FormusLinker', function() {
                 if (linkers.hasOwnProperty(type)) {
                     injector.invoke(linkers[type], null, args);
                 } else {
-                    log.info('Don\'t find linker for input "' + type + '"');
+                  // log.info('Don\'t find linker for input "' + type + '"');
                 }
                 injector.invoke(linkers.loadTemplate, null, args);
             },

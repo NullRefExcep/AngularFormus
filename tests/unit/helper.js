@@ -43,7 +43,7 @@ describe('Formus Helper', function() {
         };
         var setValue = helper.setNested(obj, 'a.b', value);
         expect(obj.a.b).toBe(value);
-        expect(setValue).toBe(value);
+        expect(setValue).toBe(obj);
     });
 
     it('should create new model from fields configuration', function() {

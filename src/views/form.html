@@ -1,10 +1,13 @@
 <form role="form" id="{{name}}" class="{{config.class}}" style="{{config.style}}" ng-submit="submit()">
     <header>
-        <div ng-if="config.showErrors">
-            
+        <div ng-if="config.showErrors && !isValid" class="alert alert-danger">
+            <ul>
+                <li ng-repeat="e in errorList" ng-bind="e"></li>
+            </ul>
         </div>
     </header>
-    <formus-field ng-model="model" errors="errors" config="fieldset"></formus-field>
+    <formus-field config="fieldset" class="special"></formus-field>
+    <div class="clear-fix"></div>
     <footer>
         <div ng-repeat="btn in config.buttons" class="pull-left">
             <button class="{{btn.class}}" type="button" ng-if="!btn.items" ng-click="btn.handler()">
