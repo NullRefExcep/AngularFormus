@@ -44,3 +44,4 @@ app.config(['FormusValidatorProvider', function(FormusValidatorProvider) {
         return null;
     });
 }]);
+

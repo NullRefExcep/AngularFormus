@@ -314,14 +314,12 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
 /** 
  * Service with specific functions
  */
-formus.factory('FormusHelper', function() {
+formus.provider('FormusHelper', function() {
     /**
      * Create error array form error object
      */
     var getErrorsList = function(object) {
-
         var errorList = [];
-
         var addErrors = function(errors) {
             if (Array.isArray(errors)) {
                 if (_.each(errors, function(item) {
@@ -465,7 +463,7 @@ formus.factory('FormusHelper', function() {
         return list;
     };
 
-    return {
+    var methods = {
         getErrorsList: getErrorsList,
         setNested: setNested,
         getNested: getNested,
@@ -473,6 +471,14 @@ formus.factory('FormusHelper', function() {
         extendDeep: extendDeep,
         extractBackendErrors: extractBackendErrors,
         extractItems: extractItems
+    };
+    return {
+        setMethod: function(name, method) {
+            methods[name] = method;
+        },
+        $get: function() {
+            return methods;
+        }
     };
 });
 
