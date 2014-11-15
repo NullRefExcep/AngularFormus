@@ -172,6 +172,16 @@ form.config.submit.handler = function() {
 };
 ```
 
+All methods of `FormusHelper` can be overridden, e.g:
+```js
+app.config(['FormusHelperProvider', function(FormusHelperProvider) {
+    FormusHelperProvider.setMethod('nameOfMethod', function() {
+        /* Implementation */
+    });
+}]);
+```
+
+
 #### Default Configurations
 
 `FormusConfig` service allows to set default configurations for every type of input.
