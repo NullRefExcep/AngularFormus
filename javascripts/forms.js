@@ -3,7 +3,7 @@ var formsConfiguration = {
         title: 'Info',
         fieldset: {
             fields: [{
-                name: 'nested.test',
+                name: 'type.category',
                 fields: [{
                     name: 'name',
                     label: 'Name',
@@ -58,8 +58,17 @@ var formsConfiguration = {
         },
         config: {
             buttons: [{
+                class: 'btn btn-success',
+                title: 'Load List From GitHub'
+            },{
+                class: 'btn btn-warning',
+                title: 'Set Custom Error'
+            },{
                 class: 'btn btn-danger',
-                title: 'Load Users From GitHub'
+                title: 'Clear Errors'
+            },{
+                class: 'btn btn-default',
+                title: 'Add New Text Field'
             }],
             submit: {
                 class: 'btn btn-primary'

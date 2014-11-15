@@ -55,11 +55,13 @@
         <div class="row" id="getting-started" ng-controller="MainCtrl">
             <div class="col-md-3">
                 <h4>Model</h4>
-                <pre hljs>{{form.data | json}}</pre>
+                <pre>{{form.data | json}}</pre>
+                <h4>Errors</h4>
+                <pre>{{form.errors | json}}</pre>
             </div>
             <div class="col-md-5">
                 <h4>Simple form</h4>
-                <formus-form config="form.config" model="form.data" fieldset="form.fieldset"></formus-form>
+                <formus-form config="form.config" model="form.data" fieldset="form.fieldset" errors="form.errors"></formus-form>
                 <div class="margin-top-10">
                     <h4>Install</h4>
                     <pre class="code bash">$ bower install -S angular-formus</pre>
