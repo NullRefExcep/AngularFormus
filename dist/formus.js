@@ -7,7 +7,7 @@
     '$logProvider',
     function ($logProvider) {
       var getDefault = function () {
-        return {};
+        return { showErrors: true };
       };
       var configs = {
           form: function () {
@@ -17,6 +17,7 @@
               fieldset: { fields: [] },
               data: {},
               config: {
+                showErrors: true,
                 readonly: false,
                 buttons: [],
                 class: 'padding-top-10',
@@ -30,13 +31,14 @@
             };
           },
           fieldset: function () {
-            return {};
+            return { showErrors: false };
           },
           checkbox: function () {
             return {
               showLabel: false,
               trueValue: true,
-              falseValue: false
+              falseValue: false,
+              default: false
             };
           },
           radio: function () {
@@ -63,7 +65,7 @@
           if (configs[name]) {
             return configs[name]();
           }
-          $log.info('Don\'t find config for input "' + name + '"');
+          // $log.info('Don\'t find config for input "' + name + '"');
           return getDefault();
         };
         return { get: get };
@@ -135,118 +137,77 @@
       return {
         transclude: true,
         restrict: 'E',
-        require: 'ngModel',
-        scope: {
-          'config': '=',
-          'parentErrors': '=errors',
-          'ngModel': '='
-        },
-        link: function ($scope, $element, $attr, ngModelCtrl) {
+        scope: { 'config': '=' },
+        link: function ($scope, $element, $attr) {
           $scope.isValid = true;
+          $scope.dirty = false;
           $scope.validation = function (value) {
-            if (typeof $scope.config.validators === 'object') {
-              var errors = [];
+            if (_.isObject($scope.config.validators)) {
+              $scope.errors = [];
               angular.forEach($scope.config.validators, function (args, name) {
                 var error = FormusValidator.validate(name, value, $scope.config, args);
-                if (error !== null && typeof error === 'string') {
-                  errors.push(error);
+                if (error !== null && _.isString(error)) {
+                  $scope.errors.push(error);
                 }
               });
-              if (errors.length > 0) {
-                $scope.error = errors;
-                $scope.isValid = false;
-              } else {
-                $scope.error = null;
-                $scope.isValid = true;
-              }
-            }
-          };
-          var initErrorsWatchers = function () {
-            $scope.$watch('parentErrors', function (newValue) {
-              if (angular.isDefined(newValue)) {
-                if ($scope.isParent) {
-                  $scope.errors = FormusHelper.getNested(newValue, $scope.config.name, $scope.errors);
-                } else {
-                  $scope.error = FormusHelper.getNested(newValue, $scope.config.name, $scope.error);
-                }
-              }
-            }, true);
-            if ($scope.isParent) {
-              $scope.$watch('errors', function (newValue) {
-                if (angular.isDefined(newValue)) {
-                  $scope.parentErrors = newValue;
-                }
-              }, true);
-            } else {
-              $scope.$watch('error', function (newValue) {
-                if (angular.isDefined(newValue)) {
-                  if ($scope.config.name) {
-                    if (!angular.isObject($scope.parentErrors)) {
-                      $scope.parentErrors = {};
-                    }
-                    $scope.parentErrors[$scope.config.name] = newValue;
-                  } else {
-                    $scope.parentErrors = newValue;
-                  }
-                }
-              }, true);
             }
           };
           $scope.$on('Formus.validate', function () {
             if (!$scope.config.hide) {
               $scope.validation($scope.model);
             } else {
-              $scope.error = null;
+              $scope.errors = [];
               $scope.isValid = true;
             }
             $scope.$emit('Formus.validated', $scope.isValid);
           });
-          $scope.init = function () {
-            $scope.isParent = typeof $scope.config.fields !== 'undefined';
+          var init = function () {
+            $scope.parentCtrl = $element.parent().controller('formus-field');
+            if (_.isUndefined($scope.parentCtrl)) {
+              $scope.parentCtrl = $element.parent().controller('formus-form');
+            }
+            $scope.parentScope = $scope.parentCtrl.getScope();
+            $scope.parentScope.$watch('model', function (newValue) {
+              $scope.model = FormusHelper.getNested(newValue, $scope.config.name);
+            }, true);
+            $scope.$watch('model', function (newValue, oldValue) {
+              if (newValue !== oldValue) {
+                FormusHelper.setNested($scope.parentScope.model, $scope.config.name, newValue);
+                $scope.dirty = true;
+                $scope.validation(newValue);
+              }
+            });
+            $scope.parentScope.$watch('errors', function (newValue) {
+              $scope.errors = FormusHelper.getNested(newValue, $scope.config.name);
+            }, true);
+            $scope.$watch('errors', function (newValue, oldValue) {
+              if (newValue !== oldValue) {
+                $scope.isValid = !(Array.isArray(newValue) && newValue.length > 0);
+                $scope.parentScope.errors = FormusHelper.setNested($scope.parentScope.errors, $scope.config.name, newValue);
+              }
+            });
+            $scope.isParent = !_.isUndefined($scope.config.fields);
             /** Set field type 'fieldset' when it has child fields and don't set other type */
-            if ($scope.isParent && typeof $scope.config.input === 'undefined') {
+            if ($scope.isParent && _.isUndefined($scope.config.input)) {
               $scope.config.input = 'fieldset';
             }
-            $scope.$watch('ngModel', function (newValue) {
-              var value;
-              if (angular.isDefined(newValue) && angular.isDefined(value = FormusHelper.getNested(newValue, $scope.config.name))) {
-                $scope.model = value;
-              }
-            }, true);
-            $scope.$watch('model', function (newValue) {
-              if (angular.isDefined(ngModelCtrl.$modelValue)) {
-                var value = FormusHelper.getNested(ngModelCtrl.$modelValue, $scope.config.name);
-                if (angular.isDefined(value)) {
-                  if (value !== newValue) {
-                    FormusHelper.setNested(ngModelCtrl.$modelValue, $scope.config.name, newValue);
-                    ngModelCtrl.$dirty = true;
-                  }
-                }
-                if (ngModelCtrl.$dirty) {
-                  $scope.validation(newValue);
-                }
-              }
-            }, true);
-            initErrorsWatchers();
             FormusLinker.call($scope.config.input, {
               $scope: $scope,
               $element: $element,
-              $attr: $attr,
-              $ngModelCtrl: ngModelCtrl
+              $attr: $attr
             });
-            if (typeof $scope.config.linker === 'function') {
+            if (_.isFunction($scope.config.linker)) {
               $injector.invoke($scope.config.linker, this, {
                 $scope: $scope,
                 $element: $element,
-                $attr: $attr,
-                $ngModelCtrl: ngModelCtrl
+                $attr: $attr
               });
             }
           };
           /** Wait when config will be defined */
           var listener = $scope.$watch('config', function () {
               if (angular.isDefined($scope.config)) {
-                $scope.init();
+                init();
                 listener();
               }
             }, true);
@@ -255,6 +216,9 @@
           '$scope',
           '$element',
           function ($scope, $element) {
+            this.getScope = function () {
+              return $scope;
+            };
           }
         ]
       };
@@ -264,7 +228,8 @@
     '$q',
     'FormusLinker',
     'FormusTemplates',
-    function ($q, FormusLinker, FormusTemplates) {
+    'FormusHelper',
+    function ($q, FormusLinker, FormusTemplates, FormusHelper) {
       return {
         transclude: true,
         replace: true,
@@ -278,6 +243,12 @@
         },
         templateUrl: FormusTemplates.getUrl('form'),
         link: function ($scope, $element, $attr) {
+          $scope.isValid = true;
+          $scope.errorList = [];
+          $scope.$watch('errors', function (newValue) {
+            $scope.errorList = FormusHelper.getErrorsList(newValue);
+            $scope.isValid = $scope.errorList.length === 0;
+          }, true);
           FormusLinker.formLinker({
             $scope: $scope,
             $element: $element,
@@ -289,6 +260,9 @@
           '$element',
           '$rootScope',
           function ($scope, $element, $rootScope) {
+            this.getScope = function () {
+              return $scope;
+            };
             $scope.validate = function () {
               var deferred = $q.defer(), fieldsAmount = $element.find('formus-field').length, validated = 0, hasInvalid = false;
               var handler = function (event, isValid) {
@@ -329,15 +303,33 @@
   ]);
   /** 
  * Service with specific functions
- *
  */
-  formus.factory('FormusHelper', function () {
+  formus.provider('FormusHelper', function () {
+    /**
+     * Create error array form error object
+     */
+    var getErrorsList = function (object) {
+      var errorList = [];
+      var addErrors = function (errors) {
+        if (Array.isArray(errors)) {
+          if (_.each(errors, function (item) {
+              errorList.push(item);
+            }));
+        } else {
+          _.each(errors, function (item) {
+            addErrors(item);
+          });
+        }
+      };
+      addErrors(object);
+      return errorList;
+    };
     /**
      * Extract error object from server response
      */
     var extractBackendErrors = function (response) {
       var errors = {};
-      angular.forEach(response.data, function (error) {
+      _.each(response.data, function (error) {
         this[error.field] = [error.message];
       }, errors);
       return errors;
@@ -345,19 +337,8 @@
     /**
      * Merge objects by recursive strategy
      */
-    var extendDeep = function extendDeep(dst) {
-      angular.forEach(arguments, function (obj) {
-        if (obj !== dst) {
-          angular.forEach(obj, function (value, key) {
-            if (angular.isDefined(dst[key]) && dst[key].constructor && dst[key].constructor === Object && typeof dst[key] === 'object' && typeof value === 'object') {
-              extendDeep(dst[key], value);
-            } else {
-              dst[key] = value;
-            }
-          });
-        }
-      });
-      return dst;
+    var extendDeep = function extendDeep(dst, src) {
+      return _.merge(dst, src);
     };
     /**
      * Set property value from object by nested name (with dot)
@@ -367,16 +348,19 @@
         if (!angular.isObject(model)) {
           model = {};
         }
+        var result = model;
         var keys = name.split('.');
-        if (keys.length > 1) {
-          return setNested(model[keys[0]], keys.splice(1, keys.length).join('.'), value);
-        } else {
-          model[name] = value;
-          return value;
+        var len = keys.length;
+        for (var i = 0; i < len - 1; i++) {
+          var key = keys[i];
+          if (!model[key])
+            model[key] = {};
+          model = model[key];
         }
+        model[keys[len - 1]] = value;
+        return result;
       }
-      model = value;
-      return value;
+      return model = value;
     };
     /**
      * Get property value from object by nested name (with dot)
@@ -385,12 +369,18 @@
       defaultValue = angular.isDefined(defaultValue) ? defaultValue : undefined;
       if (angular.isDefined(model)) {
         if (name) {
-          var keys = name.split('.');
-          if (keys.length > 1) {
-            return getNested(model[keys[0]], keys.splice(1, keys.length).join('.'), defaultValue);
-          } else {
-            return getNested(model[name], false, defaultValue);
+          if (angular.isObject(model)) {
+            var result = model;
+            var keys = name.split('.');
+            for (i = 0; i < keys.length; i++) {
+              result = result[keys[i]];
+              if (angular.isUndefined(result)) {
+                return defaultValue;
+              }
+            }
+            return result;
           }
+          return defaultValue;
         }
         return model;
       }
@@ -456,13 +446,22 @@
       });
       return list;
     };
+    var methods = {
+        getErrorsList: getErrorsList,
+        setNested: setNested,
+        getNested: getNested,
+        initModel: initModel,
+        extendDeep: extendDeep,
+        extractBackendErrors: extractBackendErrors,
+        extractItems: extractItems
+      };
     return {
-      setNested: setNested,
-      getNested: getNested,
-      initModel: initModel,
-      extendDeep: extendDeep,
-      extractBackendErrors: extractBackendErrors,
-      extractItems: extractItems
+      setMethod: function (name, method) {
+        methods[name] = method;
+      },
+      $get: function () {
+        return methods;
+      }
     };
   });
   /** 
@@ -522,7 +521,7 @@
     };
     var formLinker = function ($scope, FormusHelper) {
       var listener = $scope.$watch('fieldset', function () {
-          if (typeof $scope.fieldset !== 'undefined') {
+          if (!_.isUndefined($scope.fieldset)) {
             $scope.model = FormusHelper.initModel($scope.model, $scope.fieldset);
             $scope.errors = $scope.errors || {};
             listener();
@@ -542,7 +541,6 @@
           if (linkers.hasOwnProperty(type)) {
             injector.invoke(linkers[type], null, args);
           } else {
-            log.info('Don\'t find linker for input "' + type + '"');
           }
           injector.invoke(linkers.loadTemplate, null, args);
         },
@@ -653,6 +651,9 @@
       ]
     };
   });
+  /** 
+ * Service for validation
+ */
   formus.provider('FormusValidator', [
     '$logProvider',
     function ($logProvider) {
@@ -716,13 +717,13 @@
 angular.module('formus').run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('formus/form.html', '<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if=config.showErrors></div></header><formus-field ng-model=model errors=errors config=fieldset></formus-field><footer><div ng-repeat="btn in config.buttons" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=btn.handler()>{{btn.title}}</button><div class="btn-group margin-left-5" ng-if=btn.items><button class="{{btn.class}} dropdown-toggle" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat="item in btn.items"><a ng-click=item.handler()>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>');
+    $templateCache.put('formus/form.html', '<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if="config.showErrors && !isValid" class="alert alert-danger"><ul><li ng-repeat="e in errorList" ng-bind=e></li></ul></div></header><formus-field config=fieldset class=special></formus-field><div class=clear-fix></div><footer><div ng-repeat="btn in config.buttons" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=btn.handler()>{{btn.title}}</button><div class="btn-group margin-left-5" ng-if=btn.items><button class="{{btn.class}} dropdown-toggle" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat="item in btn.items"><a ng-click=item.handler()>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>');
     $templateCache.put('formus/inputs/checkbox.html', '<div class=checkbox><label><input type=checkbox ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} ng-model=model name={{config.name}}>{{config.label}}</label></div>');
-    $templateCache.put('formus/inputs/fieldset.html', '<div class=row><formus-wrapper ng-repeat="field in config.fields" class={{config.wrapClass}}><formus-field ng-model=model errors=errors config=field></formus-field></formus-wrapper></div>');
+    $templateCache.put('formus/inputs/fieldset.html', '<div class=row></div><formus-wrapper ng-repeat="field in config.fields" class={{config.wrapClass}}><formus-field config=field></formus-field></formus-wrapper>');
     $templateCache.put('formus/inputs/radio.html', '<div ng-if=!config.inline><div class=radio ng-repeat="item in config.items"><label><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div></div><div ng-if=config.inline><label class="radio radio-inline" ng-repeat="item in config.items"><input ng-value=item.value name={{name}} type=radio ng-model=$parent.model>{{item.title}}</label></div>');
     $templateCache.put('formus/inputs/select.html', '<select name={{config.name}} ng-model=model class=form-control style={{config.style}} id={{config.name}} ng-options="item.value as item.title for item in config.items"><option value ng-if=config.empty>{{config.empty}}</option></select>');
     $templateCache.put('formus/inputs/textarea.html', '<textarea ng-readonly=config.readonly class=form-control placeholder={{config.placeholder?config.placeholder:config.label}} rows={{config.rows}} ng-model=model name={{config.name}} id={{config.name}} style={{config.style}}>\n</textarea>');
     $templateCache.put('formus/inputs/textbox.html', '<div ng-class="{\'input-group\': config.addon}"><div class=input-group-addon ng-if=config.addon ng-bind=config.addon></div><input ng-readonly=config.readonly ng-model=model class=form-control id={{config.name}} name={{config.name}} placeholder={{config.placeholder?config.placeholder:config.label}}></div>');
-    $templateCache.put('formus/inputs/wrapper.html', '<div class="form-group margin-bottom-5 col-md-12" ng-class="{\'has-error\': input.error}"><label for={{input.config.name}} ng-show=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude></div><span class=help-block ng-repeat="e in input.error" ng-bind=e></span></div>');
+    $templateCache.put('formus/inputs/wrapper.html', '<div class="form-group margin-bottom-5" ng-class="{\'has-error\': !input.isValid}"><label for={{input.config.name}} ng-show=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude></div><span class=help-block ng-if=input.config.showErrors ng-repeat="e in input.errors" ng-bind=e></span></div>');
   }
 ]);

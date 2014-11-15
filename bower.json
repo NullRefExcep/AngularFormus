@@ -1,7 +1,7 @@
 {
   "name": "angular-formus",
   "description": "Form generator for AngularJS",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "keywords": [
     "angular",
@@ -37,7 +37,7 @@
     "LICENSE"
   ],
   "dependencies": {
-    "angular": "^1.2",
+    "angular": "^1.3",
     "bootstrap": "~3.0.3",
     "lodash": "2.4.1"
   },
