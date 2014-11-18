@@ -83,6 +83,12 @@ var formsConfiguration = {
                         value: 7,
                         title: 'West'
                     }]
+                },{
+                    name: 'radio',
+                    label: 'Radio',
+                    input: 'radio',
+                    items: [{value:true, title: 'Yes'}, {value:false, title: 'No'}],
+                    default: true
                 }]
         },
         config: {

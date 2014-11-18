@@ -83,6 +83,7 @@ Linker can be overriden. E.g:
 - texarea
 - select
 - checkbox 
+- radio 
 
 ### Customization
 
