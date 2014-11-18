@@ -14,7 +14,7 @@ formus.provider('FormusTemplates', function() {
         textarea: 'formus/inputs/textarea.html',
         textbox: 'formus/inputs/textbox.html',
         fieldset: 'formus/inputs/fieldset.html',
-        message: 'formus/inputs/message.html',
+        button: 'formus/inputs/button.html',
         label: 'formus/inputs/label.html',
     };
 

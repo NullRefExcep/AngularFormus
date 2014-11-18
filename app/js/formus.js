@@ -47,7 +47,7 @@ formus.provider('FormusConfig', function($logProvider) {
         },
         radio: function() {
             return {
-                inline:true
+                inline: true
             }
         },
         radio: function() {
@@ -58,6 +58,12 @@ formus.provider('FormusConfig', function($logProvider) {
         group: function() {
             return {
                 'class': 'bordered'
+            };
+        },
+        button: function() {
+            return {
+                class: 'btn btn-primary',
+                handler: function() {}
             };
         },
         file: function() {
@@ -77,7 +83,7 @@ formus.provider('FormusConfig', function($logProvider) {
             if (configs[name]) {
                 return configs[name]();
             }
-           // $log.info('Don\'t find config for input "' + name + '"');
+            // $log.info('Don\'t find config for input "' + name + '"');
             return getDefault();
         };
         return {
@@ -602,7 +608,7 @@ formus.provider('FormusTemplates', function() {
         textarea: 'formus/inputs/textarea.html',
         textbox: 'formus/inputs/textbox.html',
         fieldset: 'formus/inputs/fieldset.html',
-        message: 'formus/inputs/message.html',
+        button: 'formus/inputs/button.html',
         label: 'formus/inputs/label.html',
     };
 
