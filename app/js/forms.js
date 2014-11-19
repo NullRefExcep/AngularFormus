@@ -40,6 +40,7 @@ var formsConfiguration = {
                 name: 'currency',
                 label: 'Currency',
                 input: 'select',
+                multiple: true,
                 empty: 'Select ...',
                 items: [{
                     value: 'aud',
@@ -55,38 +56,10 @@ var formsConfiguration = {
                     required: true
                 }
             }, {
-                name: 'timezone',
-                label: 'Timezone',
-                input: 'select',
-                validators: {
-                    required: true
-                },
-                items: [{
-                    value: 1,
-                    title: 'ACT'
-                }, {
-                    value: 2,
-                    title: 'North'
-                }, {
-                    value: 3,
-                    title: 'NSW'
-                }, {
-                    value: 4,
-                    title: 'Queensland'
-                }, {
-                    value: 5,
-                    title: 'South'
-                }, {
-                    value: 6,
-                    title: 'Victoria'
-                }, {
-                    value: 7,
-                    title: 'West'
-                }]
-            }, {
                 name: 'radio',
                 label: 'Radio',
                 input: 'radio',
+                inline: true,
                 items: [{
                     value: true,
                     title: 'Yes'
@@ -109,13 +82,18 @@ var formsConfiguration = {
                     }, {
                         value: 'select',
                         title: 'Select'
+                    }, {
+                        value: 'textarea',
+                        title: 'Textarea'
                     }],
                     default: 'textbox'
                 }, {
                     name: 'name',
                     label: 'Name',
-                    input: 'textbox'
+                    input: 'textbox',
+                    default: 'NewField'
                 }, {
+                    name: 'btn',
                     title: 'Add',
                     input: 'button'
                 }]

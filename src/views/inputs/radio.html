@@ -7,7 +7,7 @@
 </div>
 
 <div ng-if="config.inline">
-    <label class="radio radio-inline" ng-repeat="item in config.items">
-        <input ng-value="item.value" name="{{name}}" type="radio" ng-model="$parent.$parentmodel">{{item.title}}
+    <label class="radio-inline" ng-repeat="item in config.items">
+        <input ng-value="item.value" name="{{name}}" type="radio" ng-model="$parent.$parent.model">{{item.title}}
         </label>
 </div>

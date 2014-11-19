@@ -2,6 +2,30 @@
  * Service with specific functions
  */
 formus.provider('FormusHelper', function() {
+    var setConfigByName = function setConfigByName(self, path, prop, value) {
+        if (self.fieldset) {
+            self = self.fieldset;
+        }
+        var target = self;
+        if (angular.isString(path)) {
+            path = path.split('.');
+        }
+        path = path.length ? path : false;
+        if (path) {
+            if (self.name === path[0]) {
+                path.shift();
+            }
+            if (path.length === 0) {
+                setConfigByName(self, false, prop, value);
+            } else {
+                _.each(self.fields, function(item) {
+                    setConfigByName(item, path, prop, value);
+                });
+            }
+        } else {
+            target[prop] = value;
+        }
+    };
     /**
      * Create error array form error object
      */
@@ -151,6 +175,7 @@ formus.provider('FormusHelper', function() {
     };
 
     var methods = {
+        setConfigByName: setConfigByName,
         getErrorsList: getErrorsList,
         setNested: setNested,
         getNested: getNested,
