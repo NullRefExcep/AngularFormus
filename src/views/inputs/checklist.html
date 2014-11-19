@@ -1,0 +1,13 @@
+<div ng-if="!config.inline">
+    <div class="checkbox" ng-repeat="item in config.items">
+        <label>
+            <input ng-true-value="{{config.trueValue}}" ng-false-value="{{config.falseValue}}" name="{{name}}" type="checkbox" ng-model="$parent.$parent.model[item.value]">{{item.title}}
+            </label>
+    </div>
+</div>
+
+<div ng-if="config.inline">
+    <label class="checkbox-inline" ng-repeat="item in config.items">
+        <input ng-true-value="{{config.trueValue}}" ng-false-value="{{config.falseValue}}" name="{{name}}" type="checkbox" ng-model="$parent.$parent.model[item.value]">{{item.title}}
+        </label>
+</div>

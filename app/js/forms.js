@@ -40,7 +40,6 @@ var formsConfiguration = {
                 name: 'currency',
                 label: 'Currency',
                 input: 'select',
-                multiple: true,
                 empty: 'Select ...',
                 items: [{
                     value: 'aud',

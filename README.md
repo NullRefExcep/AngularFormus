@@ -84,6 +84,7 @@ Linker can be overriden. E.g:
 - select
 - checkbox 
 - radio 
+- checklist
 
 ### Customization
 

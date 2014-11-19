@@ -39,6 +39,13 @@ formus.provider('FormusConfig', function($logProvider) {
                 default: false
             }
         },
+        checklist: function() {
+            return {
+                trueValue: true,
+                falseValue: false,
+                items: []
+            }
+        },
         radio: function() {
             return {
                 inline: true
