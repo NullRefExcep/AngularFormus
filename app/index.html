@@ -8,7 +8,7 @@
 </head>
 
 <body ng-app="app">
-    <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+    <header class="navbar navbar-static-top bs-docs-nav no-margin" id="top" role="banner">
         <div class="container">
             <div class="navbar-header">
                 <a href="/" class="navbar-brand">AngularFormus</a>
@@ -32,10 +32,15 @@
             </nav>
         </div>
     </header>
+    <div>
+        
+    </div>
     <div ng-controller="MainCtrl" class="container">
+    <div class="col-md-12">
+        <h5 class="lead">Customizable and extensible forms generator for AngularJS</h5>
+    </div>
         <div class="row" id="getting-started">
             <div class="col-md-4">
-                <p class="lead">AngularFormus &#8211 simple and extensive form generator!</p>
                 <span>Model:</span>
                 <pre>{{form.data | json}}</pre>
                 <span>Errors:</span>

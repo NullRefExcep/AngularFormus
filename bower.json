@@ -31,7 +31,7 @@
     ".gitignore",
     ".jshintrc",
     "bower.json",
-    "Gruntfile.js",
+    "gulpfile.js",
     "package.json",
     "README.md",
     "LICENSE"
