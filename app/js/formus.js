@@ -728,6 +728,40 @@ formus.provider('FormusValidator', function($logProvider) {
                 return config.label + ' cannot be blank';
             }
             return null;
+        },
+        email: function(value, config) {
+            var validateEmail = function(value) {
+                if (value) {
+                    var pattern = /^(([^<>()[\]\\.,;:\s@\']+(\.[^<>()[\]\\.,;:\s@\']+)*)|(\'.+\'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return pattern.test(value);
+                } else {
+                    return true;
+                }
+            }
+
+            if (!validateEmail(value)) {
+                return config.label + ' must be a valid e-mail';
+            }
+            return null;
+        },
+        url: function(value, config) {
+            var validateLink = function(url) {
+                if (value) {
+                    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+                        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+                        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+                        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+                        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+                        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+                    return pattern.test(url);
+                } else {
+                    return true;
+                }
+            }
+            if (!validateLink(value)) {
+                return config.label + ' must be a valid url';
+            }
+            return null;
         }
     };
     var getProvider = function($log) {

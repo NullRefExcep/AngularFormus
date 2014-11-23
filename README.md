@@ -141,6 +141,10 @@ This validator can take options as object with property `min`, e.g:
 ```js
 validators: {numeric: {min:0}}
 ```
+Available validators: 
+- required
+- email
+- url
 
 ##### Events
 Formus emit an event after validation:
