@@ -157,6 +157,7 @@
           $scope.dirty = false;
           $scope.validation = function (value) {
             if (_.isObject($scope.config.validators)) {
+              debugger;
               $scope.errors = [];
               angular.forEach($scope.config.validators, function (args, name) {
                 var error = FormusValidator.validate(name, value, $scope.config, args);
@@ -274,6 +275,19 @@
           '$element',
           '$rootScope',
           function ($scope, $element, $rootScope) {
+            $scope.callHandler = function (item) {
+              if (item.validate) {
+                $scope.validate().then(function () {
+                  if (angular.isFunction(item.handler())) {
+                    item.handler();
+                  }
+                }, angular.noop);
+              } else {
+                if (angular.isFunction(item.handler())) {
+                  item.handler();
+                }
+              }
+            };
             this.getScope = function () {
               return $scope;
             };
@@ -697,9 +711,9 @@
     '$logProvider',
     function ($logProvider) {
       var validators = {
-          required: function (value, config) {
+          required: function (value, config, args) {
             if (!value) {
-              return config.label + ' cannot be blank';
+              return args && args.msg ? args.msg : config.label + ' cannot be blank';
             }
             return null;
           },
@@ -785,7 +799,7 @@
 angular.module('formus').run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('formus/form.html', '<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if="config.showErrors && !isValid" class="alert alert-danger"><ul><li ng-repeat="e in errorList" ng-bind=e></li></ul></div></header><formus-field config=fieldset class=special></formus-field><div class=clear-fix></div><footer><div ng-repeat="btn in config.buttons" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=btn.handler()>{{btn.title}}</button><div class="btn-group margin-left-5" ng-if=btn.items><button class="{{btn.class}} dropdown-toggle" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat="item in btn.items"><a ng-click=item.handler()>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>');
+    $templateCache.put('formus/form.html', '<form role=form id={{name}} class={{config.class}} style={{config.style}} ng-submit=submit()><header><div ng-if="config.showErrors && !isValid" class="alert alert-danger"><ul><li ng-repeat="e in errorList" ng-bind=e></li></ul></div></header><formus-field config=fieldset class=special></formus-field><div class=clear-fix></div><footer><div ng-repeat="btn in config.buttons" class=pull-left><button class={{btn.class}} type=button ng-if=!btn.items ng-click=callHandler(btn)>{{btn.title}}</button><div class="btn-group margin-left-5" ng-if=btn.items><button class="{{btn.class}} dropdown-toggle" type=button data-toggle=dropdown>{{btn.title}} <span class=caret></span></button><ul class=dropdown-menu><li ng-repeat="item in btn.items"><a ng-click=callHandler(item)>{{item.title}}</a></li></ul></div></div><button ng-if=config.submit type=submit class={{config.submit.class}} ng-bind=config.submit.title></button></footer></form>');
     $templateCache.put('formus/inputs/button.html', '<button type=button class={{config.class}} ng-bind=config.title ng-click=config.handler()></button>');
     $templateCache.put('formus/inputs/checkbox.html', '<div class=checkbox><label><input type=checkbox ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} ng-model=model name={{config.name}}>{{config.label}}</label></div>');
     $templateCache.put('formus/inputs/checklist.html', '<div ng-if=!config.inline><div class=checkbox ng-repeat="item in config.items"><label><input ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} name={{name}} type=checkbox ng-model=$parent.$parent.model[item.value]>{{item.title}}</label></div></div><div ng-if=config.inline><label class=checkbox-inline ng-repeat="item in config.items"><input ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} name={{name}} type=checkbox ng-model=$parent.$parent.model[item.value]>{{item.title}}</label></div>');

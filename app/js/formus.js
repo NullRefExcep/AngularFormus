@@ -164,6 +164,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
             $scope.dirty = false;
             $scope.validation = function(value) {
                 if (_.isObject($scope.config.validators)) {
+                    debugger;
                     $scope.errors = [];
                     angular.forEach($scope.config.validators, function(args, name) {
                         var error = FormusValidator.validate(name, value, $scope.config, args);
@@ -278,6 +279,20 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             });
         },
         controller: function($scope, $element, $rootScope) {
+
+            $scope.callHandler = function(item) {
+                if (item.validate) {
+                    $scope.validate().then(function() {
+                        if (angular.isFunction(item.handler())) {
+                            item.handler();
+                        }
+                    }, angular.noop);
+                } else {
+                    if (angular.isFunction(item.handler())) {
+                        item.handler();
+                    }
+                }
+            }
             this.getScope = function() {
                 return $scope;
             };
@@ -723,9 +738,9 @@ formus.provider('FormusTemplates', function() {
  */
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
-        required: function(value, config) {
+        required: function(value, config, args) {
             if (!value) {
-                return config.label + ' cannot be blank';
+                return ((args) && (args.msg)) ? args.msg : (config.label + ' cannot be blank');
             }
             return null;
         },

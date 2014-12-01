@@ -3,9 +3,9 @@
  */
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
-        required: function(value, config) {
+        required: function(value, config, args) {
             if (!value) {
-                return config.label + ' cannot be blank';
+                return ((args) && (args.msg)) ? args.msg : (config.label + ' cannot be blank');
             }
             return null;
         },

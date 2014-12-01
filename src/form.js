@@ -26,6 +26,20 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             });
         },
         controller: function($scope, $element, $rootScope) {
+
+            $scope.callHandler = function(item) {
+                if (item.validate) {
+                    $scope.validate().then(function() {
+                        if (angular.isFunction(item.handler())) {
+                            item.handler();
+                        }
+                    }, angular.noop);
+                } else {
+                    if (angular.isFunction(item.handler())) {
+                        item.handler();
+                    }
+                }
+            }
             this.getScope = function() {
                 return $scope;
             };

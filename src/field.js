@@ -10,6 +10,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
             $scope.dirty = false;
             $scope.validation = function(value) {
                 if (_.isObject($scope.config.validators)) {
+                    debugger;
                     $scope.errors = [];
                     angular.forEach($scope.config.validators, function(args, name) {
                         var error = FormusValidator.validate(name, value, $scope.config, args);

@@ -101,7 +101,8 @@ var formsConfiguration = {
         config: {
             buttons: [{
                 class: 'btn btn-danger',
-                title: 'Cancel'
+                title: 'Cancel',
+                validate: true
             }, {
                 class: 'btn btn-warning',
                 title: 'Set Erros'

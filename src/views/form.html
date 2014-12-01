@@ -10,7 +10,7 @@
     <div class="clear-fix"></div>
     <footer>
         <div ng-repeat="btn in config.buttons" class="pull-left">
-            <button class="{{btn.class}}" type="button" ng-if="!btn.items" ng-click="btn.handler()">
+            <button class="{{btn.class}}" type="button" ng-if="!btn.items" ng-click="callHandler(btn)">
                 {{btn.title}}
             </button>
             <div class="btn-group margin-left-5" ng-if="btn.items">
@@ -19,7 +19,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="item in btn.items"><a ng-click="item.handler()">{{item.title}}</a>
+                    <li ng-repeat="item in btn.items"><a ng-click="callHandler(item)">{{item.title}}</a>
                     </li>
                 </ul>
             </div>
