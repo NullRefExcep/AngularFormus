@@ -77,6 +77,11 @@ formus.provider('FormusConfig', function($logProvider) {
             return {
                 showLink: true
             };
+        },
+        message: function () {
+            return {
+                type: 'info'
+            }
         }
     };
     var set = function(name, config) {
@@ -118,7 +123,7 @@ formus.provider('FormusContainer', function() {
 
     var get = function(name) {
         var form = {};
-        if (typeof name === 'undefined') {
+        if (angular.isUndefined(name)) {
             log.error('Don\'t set form configuration name ');
         } else {
             if (container[name]) {
@@ -164,7 +169,6 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
             $scope.dirty = false;
             $scope.validation = function(value) {
                 if (_.isObject($scope.config.validators)) {
-                    debugger;
                     $scope.errors = [];
                     angular.forEach($scope.config.validators, function(args, name) {
                         var error = FormusValidator.validate(name, value, $scope.config, args);
@@ -657,6 +661,7 @@ formus.provider('FormusTemplates', function() {
         fieldset: 'formus/inputs/fieldset.html',
         button: 'formus/inputs/button.html',
         label: 'formus/inputs/label.html',
+        message: 'formus/inputs/message.html',
     };
 
     /**

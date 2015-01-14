@@ -66,6 +66,9 @@
           },
           file: function () {
             return { showLink: true };
+          },
+          message: function () {
+            return { type: 'info' };
           }
         };
       var set = function (name, config) {
@@ -103,7 +106,7 @@
     };
     var get = function (name) {
       var form = {};
-      if (typeof name === 'undefined') {
+      if (angular.isUndefined(name)) {
         log.error('Don\'t set form configuration name ');
       } else {
         if (container[name]) {
@@ -157,7 +160,6 @@
           $scope.dirty = false;
           $scope.validation = function (value) {
             if (_.isObject($scope.config.validators)) {
-              debugger;
               $scope.errors = [];
               angular.forEach($scope.config.validators, function (args, name) {
                 var error = FormusValidator.validate(name, value, $scope.config, args);
@@ -632,7 +634,8 @@
         textbox: 'formus/inputs/textbox.html',
         fieldset: 'formus/inputs/fieldset.html',
         button: 'formus/inputs/button.html',
-        label: 'formus/inputs/label.html'
+        label: 'formus/inputs/label.html',
+        message: 'formus/inputs/message.html'
       };
     /**
      * @param name string | object (name: Url)
@@ -804,10 +807,11 @@ angular.module('formus').run([
     $templateCache.put('formus/inputs/checkbox.html', '<div class=checkbox><label><input type=checkbox ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} ng-model=model name={{config.name}}>{{config.label}}</label></div>');
     $templateCache.put('formus/inputs/checklist.html', '<div ng-if=!config.inline><div class=checkbox ng-repeat="item in config.items"><label><input ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} name={{name}} type=checkbox ng-model=$parent.$parent.model[item.value]>{{item.title}}</label></div></div><div ng-if=config.inline><label class=checkbox-inline ng-repeat="item in config.items"><input ng-true-value={{config.trueValue}} ng-false-value={{config.falseValue}} name={{name}} type=checkbox ng-model=$parent.$parent.model[item.value]>{{item.title}}</label></div>');
     $templateCache.put('formus/inputs/fieldset.html', '<div class={{config.class}}><formus-wrapper ng-repeat="field in config.fields" class={{config.wrapClass}}><formus-field config=field></formus-field></formus-wrapper></div>');
+    $templateCache.put('formus/inputs/message.html', '<div class="alert alert-{{config.type}} {{config.class}}">{{model}}</div>');
     $templateCache.put('formus/inputs/radio.html', '<div ng-if=!config.inline><div class=radio ng-repeat="item in config.items"><label><input ng-value=item.value name={{name}} type=radio ng-model=$parent.$parent.model>{{item.title}}</label></div></div><div ng-if=config.inline><label class=radio-inline ng-repeat="item in config.items"><input ng-value=item.value name={{name}} type=radio ng-model=$parent.$parent.model>{{item.title}}</label></div>');
     $templateCache.put('formus/inputs/select.html', '<select name={{config.name}} ng-model=model class=form-control ng-multiple=config.multiple style={{config.style}} id={{config.name}} ng-options="item.value as item.title for item in config.items"><option value ng-if=config.empty>{{config.empty}}</option></select>');
     $templateCache.put('formus/inputs/textarea.html', '<textarea ng-readonly=config.readonly class=form-control placeholder={{config.placeholder?config.placeholder:config.label}} rows={{config.rows}} ng-model=model name={{config.name}} id={{config.name}} style={{config.style}}>\n</textarea>');
     $templateCache.put('formus/inputs/textbox.html', '<div ng-class="{\'input-group\': config.addon}"><div class=input-group-addon ng-if=config.addon ng-bind=config.addon></div><input ng-readonly=config.readonly ng-model=model class=form-control id={{config.name}} name={{config.name}} placeholder={{config.placeholder?config.placeholder:config.label}}></div>');
-    $templateCache.put('formus/inputs/wrapper.html', '<div class="form-group margin-bottom-5" ng-class="{\'has-error\': !input.isValid}"><label for={{input.config.name}} ng-if=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude></div><span class=help-block ng-if=input.config.showErrors ng-repeat="e in input.errors" ng-bind=e></span></div>');
+    $templateCache.put('formus/inputs/wrapper.html', '<div class="form-group margin-bottom-5" ng-class="{\'has-error\': !input.isValid}"><label for={{input.config.name}} ng-if=input.config.showLabel ng-bind=input.config.label></label><div ng-transclude=""></div><span class=help-block ng-if=input.config.showErrors ng-repeat="e in input.errors" ng-bind=e></span></div>');
   }
 ]);

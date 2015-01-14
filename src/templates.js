@@ -16,6 +16,7 @@ formus.provider('FormusTemplates', function() {
         fieldset: 'formus/inputs/fieldset.html',
         button: 'formus/inputs/button.html',
         label: 'formus/inputs/label.html',
+        message: 'formus/inputs/message.html',
     };
 
     /**

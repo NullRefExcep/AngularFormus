@@ -71,6 +71,11 @@ formus.provider('FormusConfig', function($logProvider) {
             return {
                 showLink: true
             };
+        },
+        message: function () {
+            return {
+                type: 'info'
+            }
         }
     };
     var set = function(name, config) {

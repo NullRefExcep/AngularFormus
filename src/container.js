@@ -12,7 +12,7 @@ formus.provider('FormusContainer', function() {
 
     var get = function(name) {
         var form = {};
-        if (typeof name === 'undefined') {
+        if (angular.isUndefined(name)) {
             log.error('Don\'t set form configuration name ');
         } else {
             if (container[name]) {
