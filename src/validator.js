@@ -64,7 +64,7 @@ formus.provider('FormusValidator', function($logProvider) {
         };
     };
     var set = function(name, callback) {
-        if (typeof(callback) === 'function') {
+        if (angular.isFunction(callback)) {
             validators[name] = callback;
         } else {
             $logProvider.warn('Validator must be function. Can\'t set validator with name "' + name + '"');

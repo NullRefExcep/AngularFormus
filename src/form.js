@@ -67,7 +67,7 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             };
             $scope.submit = function() {
                 $scope.validate().then(function() {
-                    if (typeof($scope.config.submit.handler) === 'function') {
+                    if (angular.isFunction($scope.config.submit.handler)) {
                         $scope.config.submit.handler();
                     }
                 }, angular.noop);

@@ -24,7 +24,7 @@ formus.provider('FormusTemplates', function() {
      * @param templateUrl
      */
     var setTemplateUrl = function(name, templateUrl) {
-        if (typeof name === 'string') {
+        if (angular.isString(name)) {
             templateMap[name] = templateUrl;
         } else {
             angular.forEach(name, function(templateUrl, name) {

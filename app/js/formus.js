@@ -168,7 +168,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
             $scope.isValid = true;
             $scope.dirty = false;
             $scope.validation = function(value) {
-                if (_.isObject($scope.config.validators)) {
+                if (angular.isObject($scope.config.validators)) {
                     $scope.errors = [];
                     angular.forEach($scope.config.validators, function(args, name) {
                         var error = FormusValidator.validate(name, value, $scope.config, args);
@@ -191,7 +191,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
 
             var init = function() {
                 $scope.parentCtrl = $element.parent().controller('formus-field');
-                if (_.isUndefined($scope.parentCtrl)) {
+                if (angular.isUndefined($scope.parentCtrl)) {
                     $scope.parentCtrl = $element.parent().controller('formus-form');
                 }
                 $scope.parentScope = $scope.parentCtrl.getScope();
@@ -219,7 +219,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
                     }
                 });
 
-                $scope.isParent = (!_.isUndefined($scope.config.fields));
+                $scope.isParent = (!angular.isUndefined($scope.config.fields));
                 /** Set field type 'fieldset' when it has child fields and don't set other type */
                 if ($scope.isParent && (_.isUndefined($scope.config.input))) {
                     $scope.config.input = 'fieldset';
@@ -230,7 +230,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
                     $element: $element,
                     $attr: $attr
                 });
-                if (_.isFunction($scope.config.linker)) {
+                if (angular.isFunction($scope.config.linker)) {
                     $injector.invoke($scope.config.linker, this, {
                         $scope: $scope,
                         $element: $element,
@@ -324,7 +324,7 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
             };
             $scope.submit = function() {
                 $scope.validate().then(function() {
-                    if (typeof($scope.config.submit.handler) === 'function') {
+                    if (angular.isFunction($scope.config.submit.handler)) {
                         $scope.config.submit.handler();
                     }
                 }, angular.noop);
@@ -548,7 +548,7 @@ formus.provider('FormusLinker', function() {
             $scope.setElementTemplate = function(templateData) {
                 $element.html(templateData);
                 $compile($element.contents())($scope);
-                if (typeof($scope.afterLoadTemplate) === 'function') {
+                if (angular.isFunction($scope.afterLoadTemplate)) {
                     $scope.afterLoadTemplate();
                 }
             };
@@ -591,7 +591,7 @@ formus.provider('FormusLinker', function() {
                 $scope.config[name] = value;
             }
         });
-        if (($scope.config.label) && (typeof($scope.config.showLabel) === 'undefined')) {
+        if (($scope.config.label) && angular.isUndefined($scope.config.showLabel)) {
             $scope.config.showLabel = true;
         }
     };
@@ -669,7 +669,7 @@ formus.provider('FormusTemplates', function() {
      * @param templateUrl
      */
     var setTemplateUrl = function(name, templateUrl) {
-        if (typeof name === 'string') {
+        if (angular.isString(name)) {
             templateMap[name] = templateUrl;
         } else {
             angular.forEach(name, function(templateUrl, name) {
@@ -804,7 +804,7 @@ formus.provider('FormusValidator', function($logProvider) {
         };
     };
     var set = function(name, callback) {
-        if (typeof(callback) === 'function') {
+        if (angular.isFunction(callback)) {
             validators[name] = callback;
         } else {
             $logProvider.warn('Validator must be function. Can\'t set validator with name "' + name + '"');

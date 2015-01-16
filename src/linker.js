@@ -7,7 +7,7 @@ formus.provider('FormusLinker', function() {
             $scope.setElementTemplate = function(templateData) {
                 $element.html(templateData);
                 $compile($element.contents())($scope);
-                if (typeof($scope.afterLoadTemplate) === 'function') {
+                if (angular.isFunction($scope.afterLoadTemplate)) {
                     $scope.afterLoadTemplate();
                 }
             };
@@ -50,7 +50,7 @@ formus.provider('FormusLinker', function() {
                 $scope.config[name] = value;
             }
         });
-        if (($scope.config.label) && (typeof($scope.config.showLabel) === 'undefined')) {
+        if (($scope.config.label) && angular.isUndefined($scope.config.showLabel)) {
             $scope.config.showLabel = true;
         }
     };
