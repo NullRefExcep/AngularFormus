@@ -1,5 +1,7 @@
 /** 
  * Service for validation
+ *
+ * This service allows to contain validator functions and perform validation of field values
  */
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {

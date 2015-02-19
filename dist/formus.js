@@ -332,7 +332,7 @@
     }
   ]);
   /** 
- * Service with specific functions
+ * Service with useful functions
  */
   formus.provider('FormusHelper', function () {
     var setConfigByName = function setConfigByName(self, path, prop, value) {
@@ -521,6 +521,7 @@
   });
   /** 
  * Provide container for directives linkers
+ * This service allows to create custom link functions for different field types
  */
   formus.provider('FormusLinker', function () {
     var loadTemplateLinker = function ($scope, $element, $compile, FormusTemplates, $log) {
@@ -709,6 +710,8 @@
   });
   /** 
  * Service for validation
+ *
+ * This service allows to contain validator functions and perform validation of field values
  */
   formus.provider('FormusValidator', [
     '$logProvider',

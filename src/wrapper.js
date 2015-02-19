@@ -5,8 +5,7 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
         templateUrl: FormusTemplates.getUrl('wrapper'),
         link: {
             post: function($scope, $element, $attr) {
-                        $scope.input = $scope.$$childHead.$$childHead;
-                
+                $scope.input = $scope.$$childHead.$$childHead;
             }
         }
     };

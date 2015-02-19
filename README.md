@@ -1,5 +1,5 @@
 # AngularFormus
-[![Bower version](https://img.shields.io/badge/bower-v0.0.2-brightgreen.svg)](https://github.com/NullRefExcep/AngularFormus/releases)
+[![Bower version](https://img.shields.io/badge/bower-v0.0.6-brightgreen.svg)](https://github.com/NullRefExcep/AngularFormus/releases)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://tldrlegal.com/license/mit-license)
 
 Customizable and extensible forms generator for AngularJS. License under MIT License.
@@ -343,4 +343,12 @@ app.config(['FormusLinkerProvider', function (FormusLinkerProvider) {
     });
 }]);
 ```
+#### Wrapper
 
+Every field in form is wrapped in special directive, it name `formusWrapper`.
+Is possible to override it template by using `FormusTemplates` service:
+```js
+app.config(['FormusTemplatesProvider', function (FormusTemplatesProvider) {
+  FormusTemplatesProvider.setTemplateUrl('wrapper', 'views/formus/inputs/my-custm-wrapper.html');
+}]);
+```

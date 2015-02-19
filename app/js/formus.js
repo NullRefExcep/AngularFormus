@@ -344,7 +344,7 @@ formus.directive('formusForm', function($q, FormusLinker, FormusTemplates, Formu
 });
 
 /** 
- * Service with specific functions
+ * Service with useful functions
  */
 formus.provider('FormusHelper', function() {
     var setConfigByName = function setConfigByName(self, path, prop, value) {
@@ -541,6 +541,7 @@ formus.provider('FormusHelper', function() {
 
 /** 
  * Provide container for directives linkers
+ * This service allows to create custom link functions for different field types
  */
 formus.provider('FormusLinker', function() {
     var loadTemplateLinker = function($scope, $element, $compile, FormusTemplates, $log) {
@@ -740,6 +741,8 @@ formus.provider('FormusTemplates', function() {
 
 /** 
  * Service for validation
+ *
+ * This service allows to contain validator functions and perform validation of field values
  */
 formus.provider('FormusValidator', function($logProvider) {
     var validators = {
@@ -827,8 +830,7 @@ formus.directive('formusWrapper', function(FormusTemplates, FormusLinker, $timeo
         templateUrl: FormusTemplates.getUrl('wrapper'),
         link: {
             post: function($scope, $element, $attr) {
-                        $scope.input = $scope.$$childHead.$$childHead;
-                
+                $scope.input = $scope.$$childHead.$$childHead;
             }
         }
     };

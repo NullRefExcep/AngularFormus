@@ -1,5 +1,6 @@
 /** 
  * Provide container for directives linkers
+ * This service allows to create custom link functions for different field types
  */
 formus.provider('FormusLinker', function() {
     var loadTemplateLinker = function($scope, $element, $compile, FormusTemplates, $log) {

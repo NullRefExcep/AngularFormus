@@ -1,5 +1,5 @@
 /** 
- * Service with specific functions
+ * Service with useful functions
  */
 formus.provider('FormusHelper', function() {
     var setConfigByName = function setConfigByName(self, path, prop, value) {
