@@ -132,10 +132,10 @@ app.config(['FormusValidatorProvider', function (FormusValidatorProvider) {
   });
 }]);
 ```
-Validator function can take three parameters:
-- field value
-- field config
-- validator options
+Validator function is called by $injector and has three special parameters:
+- `value` - field value
+- `config` - field config
+- `args` - validator options
 
 This validator can take options as object with property `min`, e.g:
 ```js

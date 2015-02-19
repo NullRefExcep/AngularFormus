@@ -179,7 +179,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
                 }
             };
 
-            $scope.$on('Formus.validate', function() {
+            $scope.$on('Formus.validate', function(e) {
                 if (!$scope.config.hide) {
                     $scope.validation($scope.model);
                 } else {
@@ -784,7 +784,7 @@ formus.provider('FormusValidator', function($logProvider) {
             return null;
         }
     };
-    var getProvider = function($log) {
+    var getProvider = function($log, $injector) {
         function get(name) {
             if (validators[name]) {
                 return validators[name];
@@ -793,7 +793,11 @@ formus.provider('FormusValidator', function($logProvider) {
 
         function validate(validatorName, value, config, args) {
             if (validators[validatorName]) {
-                return validators[validatorName](value, config, args);
+                return $injector.invoke(validators[validatorName], null, {
+                    value: value,
+                    config: config,
+                    args: args
+                });
             }
             $log.warn('Don\'t find validator with name "' + validatorName + '"');
             return null;

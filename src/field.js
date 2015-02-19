@@ -20,7 +20,7 @@ formus.directive('formusField', function($injector, $http, $compile, $log, $temp
                 }
             };
 
-            $scope.$on('Formus.validate', function() {
+            $scope.$on('Formus.validate', function(e) {
                 if (!$scope.config.hide) {
                     $scope.validation($scope.model);
                 } else {
